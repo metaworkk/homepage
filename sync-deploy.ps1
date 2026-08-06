@@ -50,7 +50,30 @@ if ($before -ne $remote) {
     Say "변경 없지만 -Force 지정됨."
 }
 
-# 2) 배포 전 안전장치 — Pages 는 파일당 25MB 를 넘으면 업로드가 실패한다
+# 2) 캐시 버전 자동 갱신 — 손으로 ?v= 숫자를 고칠 필요가 없다.
+#    style.css / script.js 의 실제 내용이 바뀌었을 때만 숫자를 올린다.
+$html = Join-Path $Root "index.html"
+$raw  = Get-Content $html -Raw -Encoding UTF8
+$cur  = [regex]::Match($raw, 'style\.css\?v=(\d+)').Groups[1].Value
+$stamp = ""
+foreach ($f in @("style.css", "script.js")) {
+    $stamp += (Get-FileHash (Join-Path $Root $f) -Algorithm MD5).Hash
+}
+$stampFile = Join-Path $Root ".assets-hash"
+$prev = if (Test-Path $stampFile) { Get-Content $stampFile -Raw } else { "" }
+
+if ($stamp.Trim() -ne $prev.Trim()) {
+    $next = [int]$cur + 1
+    $raw = $raw -replace 'style\.css\?v=\d+',  "style.css?v=$next"
+    $raw = $raw -replace 'script\.js\?v=\d+', "script.js?v=$next"
+    Set-Content $html -Value $raw -Encoding UTF8 -NoNewline
+    Set-Content $stampFile -Value $stamp -NoNewline
+    Say "캐시 버전 갱신: v$cur -> v$next (css/js 변경 감지)"
+} else {
+    Say "css/js 변경 없음 — 캐시 버전 유지 (v$cur)"
+}
+
+# 3) 배포 전 안전장치 — Pages 는 파일당 25MB 를 넘으면 업로드가 실패한다
 $big = Get-ChildItem $Root -Recurse -File |
        Where-Object { $_.Length -gt 25MB -and $_.FullName -notmatch '\\\.git\\' }
 if ($big) {
@@ -59,7 +82,7 @@ if ($big) {
     exit 1
 }
 
-# 3) 배포
+# 4) 배포
 Say "배포 시작..."
 # --branch 를 반드시 지정한다. 생략하면 git 브랜치명(main)으로 나가는데
 # 이 프로젝트의 프로덕션 브랜치는 "portfolio" 라서 라이브 도메인에 반영되지 않는다.
