@@ -27,14 +27,35 @@
 
 `ratio: "4/3"` 을 추가하면 그 작품만 액자 비율이 4:3 이 됩니다. (기본 16:9)
 
-## ⚠️ 파일 수정 후 반드시 할 것
+## 다른 PC 에서 작업하는 법
 
-`index.html` 맨 위의 **버전 숫자를 올려주세요.** 안 그러면 브라우저가 옛날 파일을 계속 씁니다.
+PowerShell 은 `&&` 를 지원하지 않으니 **한 줄씩** 실행하세요.
 
-```html
-<link rel="stylesheet" href="style.css?v=23">
-<script src="script.js?v=23"></script>
+```powershell
+git pull          # ① 시작 전 항상 먼저
 ```
+
+② 고칩니다. 고칠 곳은 위 표 참고.
+
+```powershell
+git add -A
+git commit -m "작품 설명 추가"
+git push          # ③ 끝. 배포는 자동입니다
+```
+
+**캐시 버전(`?v=`)은 손대지 않으셔도 됩니다.** 배포 스크립트가 css/js 변경을
+감지해 자동으로 올립니다.
+
+**배포는 영상이 있는 PC 가 10분마다 자동 처리**합니다. 급하면 그 PC 에서:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File sync-deploy.ps1
+```
+
+### 주의
+
+- 이메일·링크는 **두 군데**를 같이 고치세요 — `href="mailto:주소"` 와 화면에 보이는 글자
+- 영상·사진 교체는 저장소에 없으므로 **영상이 있는 PC** 에서만 가능합니다
 
 ## 이 저장소에 없는 것
 
