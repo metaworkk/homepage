@@ -1,0 +1,20 @@
+# 영상 — 용량이 커서 저장소에 넣지 않음.
+# 미리보기 압축본은 Cloudflare Pages 에, 원본은 R2(video.metawork.org) 에 있음.
+video/
+
+# 메타버스 임베드 — 별도 프로젝트(16MB 빌드 결과물)
+meta/
+
+# OS · 편집기
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# 의존성 · 로그
+node_modules/
+*.log
+
+# wrangler 로컬 캐시 (계정 정보 포함)
+.wrangler/

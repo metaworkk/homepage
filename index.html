@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이진형 — jinhyeong lee</title>
+  <meta name="description" content="시각 예술가 포트폴리오. 회화, 드로잉, 설치, 오브제 작업을 기록합니다.">
+  <link rel="canonical" href="https://metawork.org/">
+  <meta name="theme-color" content="#0d0d0c">
+
+  <!-- Open Graph (카카오톡·페이스북 공유) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="METAWORK">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://metawork.org/">
+  <meta property="og:title" content="METAWORK — Visual Artist Portfolio">
+  <meta property="og:description" content="시각 예술가 포트폴리오. 회화, 드로잉, 설치, 오브제 작업을 기록합니다.">
+  <meta property="og:image" content="https://metawork.org/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="METAWORK — Visual Artist, Based in Korea">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="METAWORK — Visual Artist Portfolio">
+  <meta name="twitter:description" content="시각 예술가 포트폴리오. 회화, 드로잉, 설치, 오브제 작업을 기록합니다.">
+  <meta name="twitter:image" content="https://metawork.org/og-image.png">
+
+  <!-- 파비콘 -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Gothic+A1:wght@400;500;700;800;900&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=23">
+</head>
+<body>
+
+  <!-- 반전 커서 (mix-blend-mode) -->
+  <div class="cursor" aria-hidden="true"></div>
+
+  <!-- 필름 그레인 -->
+  <svg class="grain" aria-hidden="true">
+    <filter id="grainFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grainFilter)"/>
+  </svg>
+
+  <!-- 내비게이션 -->
+  <nav class="nav">
+    <a href="#top" class="nav-name" data-hover>jinhyeong lee</a>
+    <div class="nav-right">
+      <a href="#gallery" data-hover>Work</a>
+      <a href="#about" data-hover>About</a>
+      <a href="#contact" data-hover>Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO — 구조적 그리드 컴포지션 -->
+  <header class="hero snap" id="top">
+    <!-- 구조 라인 -->
+    <div class="hero-frame" aria-hidden="true">
+      <i class="fv" style="left:24%"></i>
+      <i class="fv" style="left:50%"></i>
+      <i class="fv" style="left:76%"></i>
+      <i class="fh" style="top:30%"></i>
+      <i class="fh" style="top:72%"></i>
+    </div>
+
+    <!-- 마우스 크로스헤어 -->
+    <div class="xhair xhair-h" aria-hidden="true"></div>
+    <div class="xhair xhair-v" aria-hidden="true"></div>
+
+    <!-- 셀: 이름 -->
+    <div class="hero-cell hc-id">
+      <!-- <span class="hc-num">001</span> -->
+      <!-- <h1 class="hc-name">이진형</h1> -->
+      <!-- <p class="hc-role">BASED IN KOREA</p> -->
+    </div>
+
+    <!-- 셀: 인덱스 -->
+    <div class="hero-cell hc-index">
+      <span>내가 바라는 것</span>
+      <span>Vitual World,API</span>
+      <span class="hc-blue">2026</span>
+    </div>
+
+    <!-- 셀: 메타버스 (중앙) — BTC 온톨로지 월드 임베드 -->
+    <div class="hero-embed" aria-label="BTC 메타버스">
+      <div class="embed-frame">
+        <iframe id="metaFrame" src="meta/index.html?solo=1" title="BTC Metaverse — 실시간 3D 월드" loading="lazy" allow="fullscreen"></iframe>
+        <button class="embed-play" id="embedPlay" type="button" aria-label="메타버스 탐험 시작">
+          <span>▶</span> 탐험하기
+        </button>
+      </div>
+      <div class="hc-data-label">
+        <span>움직이는 세계</span>
+        <span>WASD · SPACE · DRAG</span>
+      </div>
+    </div>
+
+    <!-- 셀: 좌표/시간 -->
+    <div class="hero-cell hc-coords">
+      <span>37.5665°N 126.9780°E</span>
+      <span id="heroClock">SEOUL 00:00:00</span>
+    </div>
+
+    <!-- 셀: 스크롤 -->
+    <div class="hero-cell hc-scroll">
+      <span>SCROLL ↓</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- GALLERY — 3D 구 캐러셀 -->
+    <section class="section section-gallery snap" id="gallery">
+      <!-- 마우스오버 시 작품 사진이 크게 깔리는 배경 -->
+      <div class="gallery-bg" id="galleryBg" aria-hidden="true"></div>
+      <div class="section-label reveal">WORK</div>
+      <div class="orbit reveal" id="orbit">
+        <!-- 와이어프레임 구 -->
+        <div class="orbit-stage" id="orbitStage" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i class="lat"></i>
+        </div>
+        <!-- 작품 카드는 script.js의 WORKS 데이터로 생성됨 -->
+        <p class="orbit-hint">DRAG TO ROTATE · CLICK TO VIEW</p>
+      </div>
+    </section>
+
+    <!-- 작품 페이지 — script.js의 WORKS 배열로 한 작품당 한 화면씩 생성됨 -->
+    <div id="workPages"></div>
+
+    <!-- 전광판 작품 — 다른 작품 페이지와 같은 양식.
+         문구 수정: data-phrases 값만 바꾸면 됩니다. 문장은 | 로 구분.
+         표시 가능 문자: A-Z, 0-9, 공백, - / (한글은 세그먼트로 표현 불가)
+         data-cells = 표시 칸 수. 두 줄을 같은 값으로 두면 좌우 폭이 맞습니다. -->
+    <section class="section workpage snap" id="sign">
+      <i class="wp-rule" style="left:24%"></i>
+      <i class="wp-rule" style="left:76%"></i>
+
+      <div class="wp-inner">
+        <div class="wp-media wp-media--sign">
+          <div class="flipband">
+            <div class="flipline"
+                 data-cells="20"
+                 data-phrases="RECORD AND ERASE | LIGHT BECOMES MATTER | TRACE OF THE UNSEEN | ARCHIVE NO 001"
+                 data-role="main"
+                 aria-hidden="true"></div>
+
+            <div class="flipline flipline--sub"
+                 data-cells="20"
+                 data-phrases="PAINTING | DRAWING | INSTALLATION | OBJECT"
+                 aria-hidden="true"></div>
+
+            <p class="sr-only" id="flipText" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="wp-meta">
+          <h3 class="wp-title">작품 제목 08</h3>
+          <p class="wp-info">Split-flap display · 2026</p>
+          <p class="wp-desc">
+            여기에 작품 설명을 적어주세요. 무엇을 담고 싶었는지, 어떤 재료와 과정을 거쳤는지.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 라이트박스 — 작품별 여러 장 -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lb-close" id="lbClose" aria-label="닫기">×</button>
+      <button class="lb-arrow lb-prev" id="lbPrev" aria-label="이전">‹</button>
+      <div class="lb-body">
+        <div class="lb-slide" id="lbSlide"></div>
+        <div class="lb-info">
+          <span id="lbTitle">작품 제목</span>
+          <span id="lbCounter">1 / 1</span>
+        </div>
+      </div>
+      <button class="lb-arrow lb-next" id="lbNext" aria-label="다음">›</button>
+    </div>
+
+    <!-- ABOUT -->
+    <section class="section snap" id="about">
+      <div class="section-label reveal">About</div>
+      <div class="about">
+        <p class="about-statement serif reveal">
+          “여기에 작가 노트를 적어주세요.<br>
+          무엇을 보고, 무엇을 남기고 싶은지 —<br>
+          당신의 문장이 들어갈 자리입니다.”
+        </p>
+        <p class="about-text reveal">
+          여기에 소개 글을 적어주세요. 어떤 재료와 방식으로 작업하는지,
+          어떤 주제에 관심이 있는지, 지금은 어떤 작업을 이어가고 있는지.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section section-contact snap" id="contact">
+      <div class="section-label reveal">Contact</div>
+      <p class="contact-lead serif reveal">작업이 궁금하다면,<br>편하게 연락 주세요.</p>
+      <a class="contact-email reveal" href="mailto:your@email.com" data-hover>your@email.com</a>
+      <div class="contact-links reveal">
+        <a href="#" data-hover>Instagram</a>
+        <a href="#" data-hover>Behance</a>
+        <a href="#" data-hover>YouTube</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 METAWORK</span>
+    <span class="footer-time" id="footerTime">SEOUL 00:00:00</span>
+    <a href="#top" data-hover>Top ↑</a>
+  </footer>
+
+  <script src="script.js?v=23"></script>
+  <script>
+    // 메타버스 임베드: 클릭 전엔 미리보기(비상호작용), 클릭하면 조작 활성화
+    (function () {
+      var wrap = document.querySelector(".hero-embed");
+      var btn = document.getElementById("embedPlay");
+      if (!wrap || !btn) return;
+      var isTouch = matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+      btn.addEventListener("click", function () {
+        wrap.classList.add("active");
+        var f = document.getElementById("metaFrame");
+        if (f) f.focus();
+        // 모바일: 좁은 임베드 대신 전체화면으로 (조이스틱·조작 편하게)
+        if (isTouch && f && f.requestFullscreen) f.requestFullscreen().catch(function(){});
+      });
+    })();
+  </script>
+</body>
+</html>
