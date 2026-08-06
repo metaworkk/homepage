@@ -18,3 +18,6 @@ node_modules/
 
 # wrangler 로컬 캐시 (계정 정보 포함)
 .wrangler/
+
+# 동기화 스크립트 로그
+sync-deploy.log
