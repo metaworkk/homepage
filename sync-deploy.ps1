@@ -61,7 +61,9 @@ if ($big) {
 
 # 3) 배포
 Say "배포 시작..."
-$out = & npx --yes wrangler@latest pages deploy . --project-name=metawork --commit-dirty=true 2>&1
+# --branch 를 반드시 지정한다. 생략하면 git 브랜치명(main)으로 나가는데
+# 이 프로젝트의 프로덕션 브랜치는 "portfolio" 라서 라이브 도메인에 반영되지 않는다.
+$out = & npx --yes wrangler@latest pages deploy . --project-name=metawork --branch=portfolio --commit-dirty=true 2>&1
 $out | Where-Object { $_ -notmatch '^npm notice' } | ForEach-Object { Say "  $_" }
 
 if ($out -match "Deployment complete") {

@@ -126,26 +126,26 @@
      desc     = 작품 화면 캡션에 들어갈 설명. 비워두면 안내 문구가 대신 나옵니다.
                 줄바꿈이 필요하면 <br> 을 쓰세요. */
   const WORKS = [
-    { folder: "work01", title: "어떤 힘", meta: "Single channel video · 2026", count: 3,
-      video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/test01.jpg",
+    { folder: "work01", title: "어떤 힘", meta: "Single channel video · 2026", count: 0,
+      video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/force-poster.jpg",
       desc: "" },
-    { folder: "work02", title: "아르코예술극장", meta: "Single channel video · 2026", count: 3,
-      video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/test02.jpg",
+    { folder: "work02", title: "아르코예술극장", meta: "Single channel video · 2026", count: 0,
+      video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/arko-poster.jpg",
       desc: "" },
-    { folder: "work03", title: "KF갤러리", meta: "Single channel video · 2025", count: 2,
-      video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/test03.jpg",
+    { folder: "work03", title: "KF갤러리", meta: "Single channel video · 2025", count: 0,
+      video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/KF-poster.jpg",
       desc: "" },
-    { folder: "work04", title: "방", meta: "Single channel video · 2025", count: 4,
-      video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/test04.jpg",
+    { folder: "work04", title: "방", meta: "Single channel video · 2025", count: 0,
+      video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/room-poster.jpg",
       desc: "" },
-    { folder: "work05", title: "작은만족", meta: "Single channel video · 2025", count: 2,
-      video: "video/little-web.mp4",       videoHQ: "https://video.metawork.org/little.mp4", poster: "video/test05.jpg",
+    { folder: "work05", title: "작은만족", meta: "Single channel video · 2025", count: 0,
+      video: "video/little-web.mp4",       videoHQ: "https://video.metawork.org/little.mp4", poster: "video/little-poster.jpg",
       desc: "" },
     { folder: "work06", title: "악단광칠 NEXT JOURNEY", meta: "Single channel video · 2024", count: 0,
-      video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/test06.jpg",
+      video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
       desc: "" },
     { folder: "work07", title: "STOCK MARCH", meta: "Single channel video · 2024", count: 0,
-      video: "video/stock-march-web.mp4",  videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/test07.jpg",
+      video: "video/stock-march-web.mp4",  videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/stock-march-poster.jpg",
       desc: "" },
 
     /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
@@ -156,7 +156,15 @@
       poster: "video/sign-poster.jpg",
       desc: "",
       phrases:    ["RECORD AND ERASE", "LIGHT BECOMES MATTER", "TRACE OF THE UNSEEN", "ARCHIVE NO 001"],
-      phrasesSub: ["PAINTING", "DRAWING", "INSTALLATION", "OBJECT"] }
+      phrasesSub: ["PAINTING", "DRAWING", "INSTALLATION", "OBJECT"] },
+
+    /* ── 사진 작업 (궤도 윗줄) ──
+       row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
+    { row: 0, folder: "photo01", title: "사진 작품 01", meta: "Archival pigment print · 2026", count: 3, desc: "" },
+    { row: 0, folder: "photo02", title: "사진 작품 02", meta: "Archival pigment print · 2026", count: 3, desc: "" },
+    { row: 0, folder: "photo03", title: "사진 작품 03", meta: "Archival pigment print · 2025", count: 2, desc: "" },
+    { row: 0, folder: "photo04", title: "사진 작품 04", meta: "Archival pigment print · 2025", count: 4, desc: "" },
+    { row: 0, folder: "photo05", title: "사진 작품 05", meta: "Archival pigment print · 2024", count: 2, desc: "" }
   ];
 
   // count/folder → 실제 경로 배열 (img/work01/image01.jpg …)
@@ -262,9 +270,8 @@
   }
 
   const orbit = document.getElementById("orbit");
-  const stage = document.getElementById("orbitStage");
 
-  if (orbit && stage) {
+  if (orbit) {
     // 카드 생성 — 영상이 있으면 무음 루프, 없으면 사진, 둘 다 없으면 플레이스홀더
     const cards = WORKS.map((w, i) => {
       const fig = document.createElement("figure");
@@ -304,34 +311,50 @@
     let hovering = false;
     let startX = 0, startRot = 0, movedPx = 0;
 
+    /* 2줄 궤도 — 윗줄(사진)과 아랫줄(영상)이 서로 반대로 돈다.
+       각 작품의 row 값으로 줄을 나눈다 (0 = 윗줄, 그 외/생략 = 아랫줄) */
+    const ROW_META = [
+      { dir: -1, rScale: 0.82, yMul: -1 },   // 윗줄 — 반대 방향, 약간 안쪽
+      { dir:  1, rScale: 1.00, yMul:  1 }    // 아랫줄
+    ];
+
+    // 카드별로 소속 줄과 그 줄에서의 순번을 미리 계산
+    const rowCount = [0, 0];
+    const slot = WORKS.map((w) => {
+      const r = w.row === 0 ? 0 : 1;
+      return { row: r, idx: rowCount[r]++ };
+    });
+
+    let rowGap = 0;
+
     function orbitLayout() {
-      // 좁은 화면일수록 카드 대비 궤도를 넓게 잡아 겹침 방지
-      const ratio = orbit.clientWidth < 600 ? 0.42 : 0.32;
-      R = Math.min(orbit.clientWidth * ratio, 330);
-      const d = Math.round(R * 1.72); // 구 지름은 궤도보다 약간 작게
-      stage.style.width = d + "px";
-      stage.style.height = d + "px";
-      stage.style.marginLeft = -d / 2 + "px";
-      stage.style.marginTop = -d / 2 + "px";
+      const ratio = orbit.clientWidth < 600 ? 0.40 : 0.30;
+      R = Math.min(orbit.clientWidth * ratio, 320);
+      // 카드 높이(4:3)를 기준으로 두 줄 간격을 잡는다
+      const cardH = (cards[0]?.getBoundingClientRect().height) || 100;
+      rowGap = cardH * 0.62;
     }
 
     function orbitFrame() {
       if (!dragging && !hovering && !reducedMotion) rot += 0.14;
-      stage.style.transform = `rotateY(${rot * 1.4}deg)`;
 
-      const n = cards.length;
-      for (let i = 0; i < n; i++) {
-        const a = ((rot + (i * 360) / n) * Math.PI) / 180;
-        const x = Math.sin(a) * R;
-        const z = Math.cos(a) * R;
-        const depth = (z / R + 1) / 2; // 0(뒤) ~ 1(앞)
+      for (let i = 0; i < cards.length; i++) {
+        const st = slot[i];
+        const meta = ROW_META[st.row];
+        const n = Math.max(1, rowCount[st.row]);
+        const a = ((rot * meta.dir + (st.idx * 360) / n) * Math.PI) / 180;
+        const rr = R * meta.rScale;
+        const x = Math.sin(a) * rr;
+        const z = Math.cos(a) * rr;
+        const y = meta.yMul * rowGap;
+        const depth = (z / rr + 1) / 2;          // 0(뒤) ~ 1(앞)
+
         const c = cards[i];
         c.style.transform =
-          `translate(-50%, -50%) translate3d(${x}px, 0, ${z}px)`;
+          `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${z}px)`;
         c.style.opacity = 0.22 + 0.78 * depth;
         c.style.zIndex = String(100 + Math.round(z));
 
-        // 앞면에 온 영상만 재생 (상태가 바뀔 때만 호출)
         const v = cardVideos[i];
         if (v && !reducedMotion) {
           const shouldPlay = depth > 0.55;

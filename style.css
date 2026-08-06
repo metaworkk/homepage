@@ -807,8 +807,8 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   align-items: flex-start;
   gap: 0.2rem;
   margin-top: 0;
-  padding-top: 0.7rem;
-  border-top: 2px solid var(--ink);   /* 사진과 캡션을 가르는 선 */
+  /* 구분선 없이 여백으로만 띄운다 — 영상 아래 흰 줄이 거슬려서 제거 */
+  padding-top: 1rem;
   text-align: left;
   width: 100%;
 }
