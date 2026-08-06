@@ -122,22 +122,41 @@
      count를 0으로 두면 사진 없이 영상만 있는 작품이 됩니다. */
   /* video    = 미리보기용 압축본 (카드·작품화면에서 무음 반복재생)
      videoHQ  = 클릭해서 볼 원본. R2 등 외부 저장소 주소를 넣으면 그걸 재생하고,
-                비워두면 미리보기용 압축본을 그대로 씁니다. */
+                비워두면 미리보기용 압축본을 그대로 씁니다.
+     desc     = 작품 화면 캡션에 들어갈 설명. 비워두면 안내 문구가 대신 나옵니다.
+                줄바꿈이 필요하면 <br> 을 쓰세요. */
   const WORKS = [
     { folder: "work01", title: "어떤 힘", meta: "Single channel video · 2026", count: 3,
-      video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/test01.jpg" },
+      video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/test01.jpg",
+      desc: "" },
     { folder: "work02", title: "아르코예술극장", meta: "Single channel video · 2026", count: 3,
-      video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/test02.jpg" },
+      video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/test02.jpg",
+      desc: "" },
     { folder: "work03", title: "KF갤러리", meta: "Single channel video · 2025", count: 2,
-      video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/test03.jpg" },
+      video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/test03.jpg",
+      desc: "" },
     { folder: "work04", title: "방", meta: "Single channel video · 2025", count: 4,
-      video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/test04.jpg" },
+      video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/test04.jpg",
+      desc: "" },
     { folder: "work05", title: "작은만족", meta: "Single channel video · 2025", count: 2,
-      video: "video/little-web.mp4",       videoHQ: "https://video.metawork.org/little.mp4", poster: "video/test05.jpg" },
+      video: "video/little-web.mp4",       videoHQ: "https://video.metawork.org/little.mp4", poster: "video/test05.jpg",
+      desc: "" },
     { folder: "work06", title: "악단광칠 NEXT JOURNEY", meta: "Single channel video · 2024", count: 0,
-      video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/test06.jpg" },
+      video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/test06.jpg",
+      desc: "" },
     { folder: "work07", title: "STOCK MARCH", meta: "Single channel video · 2024", count: 0,
-      video: "video/stock-march-web.mp4",  videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/test07.jpg" }
+      video: "video/stock-march-web.mp4",  videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/test07.jpg",
+      desc: "" },
+
+    /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
+       phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
+       표시 가능 문자: A-Z, 0-9, 공백, - / (한글 불가) */
+    { type: "sign", folder: "work08", title: "작품 제목 08",
+      meta: "Split-flap display · 2026", count: 0,
+      poster: "video/sign-poster.jpg",
+      desc: "",
+      phrases:    ["RECORD AND ERASE", "LIGHT BECOMES MATTER", "TRACE OF THE UNSEEN", "ARCHIVE NO 001"],
+      phrasesSub: ["PAINTING", "DRAWING", "INSTALLATION", "OBJECT"] }
   ];
 
   // count/folder → 실제 경로 배열 (img/work01/image01.jpg …)
@@ -164,9 +183,17 @@
       sec.className = "section workpage snap";
       sec.id = "work" + String(i + 1).padStart(2, "0");
 
-      const cover = w.video || w.images[0];
+      const cover = w.video || w.poster || w.images[0];
       let media;
-      if (w.video) {
+      if (w.type === "sign") {
+        const line = (arr, cls) =>
+          '<div class="flipline' + cls + '" data-cells="20" data-phrases="' +
+          arr.join(" | ") + '" aria-hidden="true"></div>';
+        media = '<div class="flipband">' +
+                line(w.phrases || [], '" data-role="main') +
+                line(w.phrasesSub || [], " flipline--sub") +
+                '<p class="sr-only" id="flipText" aria-live="polite"></p></div>';
+      } else if (w.video) {
         media = '<video src="' + w.video + '"' +
                 (w.poster ? ' poster="' + w.poster + '"' : "") +
                 ' muted loop playsinline preload="none"></video>';
@@ -188,7 +215,7 @@
         '<i class="wp-rule" style="left:24%"></i>' +
         '<i class="wp-rule" style="left:76%"></i>' +
         '<div class="wp-inner">' +
-          '<div class="wp-media">' + media + "</div>" +
+          '<div class="wp-media' + (w.type === "sign" ? ' wp-media--sign' : '') + '">' + media + "</div>" +
           '<div class="wp-meta">' +
             '<h3 class="wp-title">' + w.title + "</h3>" +
             '<p class="wp-info">' + w.meta + "</p>" +
@@ -251,14 +278,19 @@
           (w.poster ? ' poster="' + w.poster + '"' : "") +
           ' muted loop playsinline preload="none"></video>' +
           '<span class="ph-badge">VIDEO</span></div>';
-      } else if (cover) {
-        inner = '<div class="ph"><img src="' + cover + '" alt="' + w.title +
+      } else if (w.type === "sign" || cover) {
+        inner = '<div class="ph"><img src="' + (w.poster || cover) + '" alt="' + w.title +
                 '" loading="lazy"></div>';
       } else {
         inner = '<div class="ph"><span class="ph-mark">✳</span>' +
                 '<span class="ph-text">IMAGE<br>대표 사진 자리</span></div>';
       }
-      fig.innerHTML = inner + "<figcaption>" + w.title + "</figcaption>";
+      fig.innerHTML = inner;
+      // 제목은 아래 캡션 대신, 마우스 올렸을 때 화면 위에 겹쳐 보여준다
+      const ov = document.createElement("div");
+      ov.className = "card-hover";
+      ov.innerHTML = "<span>" + w.title + "</span>";
+      fig.querySelector(".ph").appendChild(ov);
       orbit.appendChild(fig);
       return fig;
     });

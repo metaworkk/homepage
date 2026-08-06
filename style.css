@@ -635,14 +635,28 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   padding: 2px 6px;
   pointer-events: none;
 }
-.orbit-card figcaption {
-  margin-top: 0.7rem;
+/* 궤도 카드 — 제목은 캡션 대신 호버 오버레이로 (아래 .card-hover) */
+.orbit-card figcaption { display: none; }
+
+.card-hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  background: rgba(74, 91, 255, 0.42);   /* 연한 키컬러 */
+  color: #fff;
   text-align: center;
-  font-size: var(--fs-micro);
+  font-size: clamp(0.6rem, 1.1vw, 0.85rem);
+  font-weight: 700;
+  line-height: 1.3;
   letter-spacing: var(--tight);
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
+.orbit-card:hover .card-hover { opacity: 1; }
 .orbit-hint {
   position: absolute;
   bottom: 0;

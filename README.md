@@ -21,7 +21,8 @@
   count: 3,                                           // 그 폴더의 사진 장수
   video:   "video/force-web.mp4",                     // 미리보기(무음 반복재생)
   videoHQ: "https://video.metawork.org/force.mp4",    // 클릭 시 재생할 원본
-  poster:  "video/test01.jpg" }
+  poster:  "video/test01.jpg",
+  desc:    "작품 설명을 여기에.<br>줄바꿈은 <br> 로." }   // 비우면 안내 문구가 대신 나옴
 ```
 
 `ratio: "4/3"` 을 추가하면 그 작품만 액자 비율이 4:3 이 됩니다. (기본 16:9)
