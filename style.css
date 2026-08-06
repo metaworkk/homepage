@@ -21,6 +21,7 @@
   --line:     rgba(255, 255, 255, 0.30);  /* 구분선: 또렷하게 */
   --line-soft: rgba(255, 255, 255, 0.14); /* 구조선: 희미하게 */
   --key:      #4a5bff;   /* 키컬러 — hover 에서만 사용할 것 */
+  --red:      #ff3b30;   /* 전광판 둘째 줄 */
 
   /* ── 글꼴: 레퍼런스(siff.kr)와 동일한 Gothic A1 ── */
   /* Silka/Gaffer(유료)의 무료 대체 = Archivo. 한글은 Gothic A1으로 자동 폴백 */
@@ -394,7 +395,7 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 
 /* 둘째 줄 — 크기는 윗줄과 동일, 색만 한 단계 낮춰 위계를 만듦
    완전히 동일하게 하려면 아래 한 줄을 지우세요 */
-.flipline--sub .seg.on { stroke: var(--ink-soft); }
+.flipline--sub .seg.on { stroke: var(--red); }
 
 .flipcell {
   display: block;

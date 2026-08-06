@@ -154,9 +154,6 @@
     { folder: "work03", title: "영혼을 수놓은 초상", meta: "Single channel video · 2022", count: 0,
       video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/KF-poster.jpg",
       desc: "installation at KF gallary, Seoul" },
-    { folder: "work03", title: "영혼을 수놓은 초상", meta: "Single channel video · 2022", count: 0,
-      video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/KF-poster.jpg",
-      desc: "installation at KF gallary, Seoul" },
     { folder: "work04", title: "방", meta: "Single channel video · 2025", count: 0,
       video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/room-poster.jpg",
       desc: "" },
@@ -170,12 +167,6 @@
     /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
        phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
        표시 가능 문자: A-Z, 0-9, 공백, - / (한글 불가) */
-    { type: "sign", folder: "work08", title: "작품 제목 08",
-      meta: "Split-flap display · 2026", count: 0,
-      poster: "video/sign-poster.jpg",
-      desc: "",
-      phrases:    ["RECORD AND ERASE", "LIGHT BECOMES MATTER", "TRACE OF THE UNSEEN", "ARCHIVE NO 001"],
-      phrasesSub: ["PAINTING", "DRAWING", "INSTALLATION", "OBJECT"] },
 
     /* ── 사진 작업 (궤도 윗줄) ──
        row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
@@ -237,7 +228,6 @@
       sec.style.setProperty("--ratio", rw + " / " + rh);
       sec.style.setProperty("--rw", String(rw / rh));
 
-      const shots = w.slides.length;
       sec.innerHTML =
         '<i class="wp-rule" style="left:24%"></i>' +
         '<i class="wp-rule" style="left:76%"></i>' +
@@ -249,7 +239,6 @@
             '<p class="wp-desc">' + (w.desc ||
               "여기에 작품 설명을 적어주세요. 무엇을 담고 싶었는지, 어떤 재료와 과정을 거쳤는지.") +
             "</p>" +
-            '<button class="wp-open" type="button">VIEW ' + shots + " ↗</button>" +
           "</div>" +
         "</div>";
 
