@@ -272,8 +272,6 @@
       sec.style.setProperty("--rw", String(rw / rh));
 
       sec.innerHTML =
-        '<i class="wp-rule" style="left:24%"></i>' +
-        '<i class="wp-rule" style="left:76%"></i>' +
         '<div class="wp-inner">' +
           '<div class="wp-media' + (w.type === "sign" ? ' wp-media--sign' : '') + '">' + media + "</div>" +
           '<div class="wp-meta">' +
