@@ -124,7 +124,11 @@
      videoHQ  = 클릭해서 볼 원본. R2 등 외부 저장소 주소를 넣으면 그걸 재생하고,
                 비워두면 미리보기용 압축본을 그대로 씁니다.
      desc     = 작품 화면 캡션에 들어갈 설명. 비워두면 안내 문구가 대신 나옵니다.
-                줄바꿈이 필요하면 <br> 을 쓰세요. */
+                줄바꿈이 필요하면 <br> 을 쓰세요.
+     videos   = 영상이 여러 편인 작품. 배열로 적으면 클릭 후 화살표로 넘겨봅니다.
+                첫 편이 카드·작품화면의 대표 영상이 됩니다.
+                videos: [{ web: "video/xx-01-web.mp4", hq: "https://video.metawork.org/xx-01.mp4" },
+                         { web: "video/xx-02-web.mp4", hq: "https://video.metawork.org/xx-02.mp4" }] */
   const WORKS = [
         /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
        phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
@@ -142,8 +146,17 @@
     { folder: "work02", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
       video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
       desc: "Performed PAMS CHOICE 악단광칠 NEXT JOURNEY at 남산국악당, Seoul" },  
+    /* 영상이 여러 편인 작품 — 편을 추가하려면 videos 배열에 한 줄씩 넣으면 됩니다 */
     { folder: "work03", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
-      video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
+      videos: [
+        { web: "video/float-01-web.mp4", hq: "https://video.metawork.org/float-01.mp4" },
+        { web: "video/float-02-web.mp4", hq: "https://video.metawork.org/float-02.mp4" },
+        { web: "video/float-03-web.mp4", hq: "https://video.metawork.org/float-03.mp4" },
+        { web: "video/float-04-web.mp4", hq: "https://video.metawork.org/float-04.mp4" },
+        { web: "video/float-05-web.mp4", hq: "https://video.metawork.org/float-05.mp4" },
+        { web: "video/float-06-web.mp4", hq: "https://video.metawork.org/float-06.mp4" }
+      ],
+      poster: "video/float-poster.jpg",
       desc: "멜랑콜리 컴퍼니 - 테스트드라이브 작품 내 홀로그램 프로젝트 <br> Performed at 아르코예술극장 대극장, Seoul" },
     { folder: "work04", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 0,
       video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/arko-poster.jpg",
@@ -187,8 +200,11 @@
       "img/" + w.folder + "/image" + String(i + 1).padStart(2, "0") + "." + ext
     );
     // 라이트박스에서 넘겨볼 슬라이드 — 영상이 있으면 맨 앞
+    // videos 배열이 있으면 여러 편, 없으면 기존 video/videoHQ 를 1편으로 취급
+    const vids = w.videos || (w.video ? [{ web: w.video, hq: w.videoHQ }] : []);
+    w.video = vids[0] ? vids[0].web : "";        // 카드·작품화면에 쓸 대표 영상
     w.slides = [
-      ...(w.video ? [{ type: "video", src: w.videoHQ || w.video, poster: w.poster || "" }] : []),
+      ...vids.map((v) => ({ type: "video", src: v.hq || v.web, poster: w.poster || "" })),
       ...w.images.map((src) => ({ type: "image", src }))
     ];
   });
