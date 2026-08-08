@@ -7,6 +7,18 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
+  /* 사진 캐시 무력화 —
+     사진을 같은 파일명으로 교체하면 브라우저가 예전 것을 계속 보여준다.
+     script.js?v=NN 의 버전을 사진 주소에도 붙여 새 파일을 받게 한다.
+     (영상은 용량이 커서 제외 — 바뀌면 파일명을 바꾸는 편이 낫다) */
+  const ASSET_V = (() => {
+    const t = document.querySelector('script[src*="script.js"]');
+    const m = t && t.getAttribute("src").match(/[?&]v=(\d+)/);
+    return m ? m[1] : "";
+  })();
+  const bust = (u) =>
+    (!u || !ASSET_V) ? u : u + (u.includes("?") ? "&" : "?") + "v=" + ASSET_V;
+
   // 히어로 타이틀 등장
   document.body.classList.add("loaded");
 
@@ -244,10 +256,10 @@
                 '<p class="sr-only" id="flipText" aria-live="polite"></p></div>';
       } else if (w.video) {
         media = '<video src="' + w.video + '"' +
-                (w.poster ? ' poster="' + w.poster + '"' : "") +
+                (w.poster ? ' poster="' + bust(w.poster) + '"' : "") +
                 ' muted loop playsinline preload="none"></video>';
       } else if (cover) {
-        media = '<img src="' + cover + '" alt="' + w.title + '" loading="lazy">';
+        media = '<img src="' + bust(cover) + '" alt="' + w.title + '" loading="lazy">';
       } else {
         media = '<div class="ph"><span class="ph-mark">✳</span>' +
                 '<span class="ph-text">IMAGE<br>대표 사진 자리</span></div>';
@@ -321,13 +333,13 @@
       if (w.video) {
         inner =
           '<div class="ph"><video src="' + w.video + '"' +
-          (w.poster ? ' poster="' + w.poster + '"' : "") +
+          (w.poster ? ' poster="' + bust(w.poster) + '"' : "") +
           ' muted loop playsinline preload="none"></video>' +
           '<span class="ph-badge">VIDEO</span></div>';
       } else if (w.type === "sign" || cover) {
         // 궤도 카드는 3D 변형된 위치라 브라우저가 "화면 안"을 제대로 판정하지 못한다.
         // loading="lazy" 를 쓰면 화면에 있어도 로드되지 않으므로 즉시 로드시킨다.
-        inner = '<div class="ph"><img src="' + (w.poster || cover) + '" alt="' + w.title +
+        inner = '<div class="ph"><img src="' + bust(w.poster || cover) + '" alt="' + w.title +
                 '" decoding="async"></div>';
       } else {
         inner = '<div class="ph"><span class="ph-mark">✳</span>' +
@@ -435,7 +447,7 @@
       const src = WORKS[i].images[0];
       if (!src) return;
       clearTimeout(bgTimer);
-      hoverBg.style.backgroundImage = 'url("' + src + '")';
+      hoverBg.style.backgroundImage = 'url("' + bust(src) + '")';
       hoverBg.classList.add("show");
     }
     function hideBg() {
@@ -476,10 +488,10 @@
       } else if (slide.type === "video") {
         lbSlide.innerHTML =
           '<video src="' + slide.src + '"' +
-          (slide.poster ? ' poster="' + slide.poster + '"' : "") +
+          (slide.poster ? ' poster="' + bust(slide.poster) + '"' : "") +
           ' controls autoplay loop playsinline preload="metadata"></video>';
       } else {
-        lbSlide.innerHTML = '<img src="' + slide.src + '" alt="' + w.title + '">';
+        lbSlide.innerHTML = '<img src="' + bust(slide.src) + '" alt="' + w.title + '">';
       }
       lbTitle.textContent = w.title + " — " + w.meta;
       lbCounter.textContent = (lbIdx + 1) + " / " + Math.max(1, w.slides.length);
