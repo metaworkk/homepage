@@ -381,11 +381,13 @@
     let rowGap = 0;
 
     function orbitLayout() {
-      const ratio = orbit.clientWidth < 600 ? 0.40 : 0.30;
-      R = Math.min(orbit.clientWidth * ratio, 320);
-      // 카드 높이(4:3)를 기준으로 두 줄 간격을 잡는다
-      const cardH = (cards[0]?.getBoundingClientRect().height) || 100;
-      rowGap = cardH * 0.62;
+      const cw = cards[0]?.getBoundingClientRect().width  || 125;
+      const ch = cards[0]?.getBoundingClientRect().height || 100;
+      /* 카드가 좌우로 도는 폭을 위 구분선과 같게 맞춘다.
+         (반지름을 고정값으로 두면 선보다 한참 좁아 정렬이 어긋나 보인다)
+         바깥줄(rScale 1.0) 카드의 바깥 끝이 컨테이너 끝에 닿는 값 */
+      R = Math.max(120, (orbit.clientWidth - cw) / 2);
+      rowGap = ch * 0.62;
     }
 
     function orbitFrame() {
@@ -731,6 +733,59 @@
     }
   }, { threshold: 0.12, rootMargin: "100000px 0px 0px 0px" });
   document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
+  /* ----------------------------------------------------------
+     연락처 이메일 — 글자가 흩어졌다 제자리를 찾는다.
+     전광판 작품과 같은 원리(문자를 순서대로 돌려 목표 글자에서 멈춤).
+     주소는 index.html 의 data-email 에서 읽습니다.
+     ---------------------------------------------------------- */
+  const emailEl = document.getElementById("contactEmail");
+
+  if (emailEl) {
+    const TARGET = (emailEl.dataset.email || emailEl.textContent).trim();
+    const POOL = "abcdefghijklmnopqrstuvwxyz0123456789@._-";
+    const FIXED = new Set(["@", ".", "-", "_"]);   // 기호는 처음부터 제자리
+
+    if (reducedMotion) {
+      emailEl.textContent = TARGET;
+    } else {
+      // 글자마다 목표까지 돌아야 할 횟수를 달리 줘서 물결처럼 맞춰진다
+      const cells = [...TARGET].map((ch, i) => ({
+        ch,
+        fixed: FIXED.has(ch),
+        left: FIXED.has(ch) ? 0 : 6 + i * 2 + Math.floor(Math.random() * 8)
+      }));
+      const render = () =>
+        cells.map((c) => (c.left <= 0 ? c.ch
+          : POOL[Math.floor(Math.random() * POOL.length)])).join("");
+
+      emailEl.textContent = render();
+      let timer = null;
+
+      const settle = () => {
+        if (timer) return;
+        timer = setInterval(() => {
+          let done = true;
+          for (const c of cells) {
+            if (c.left > 0) { c.left--; done = false; }
+          }
+          emailEl.textContent = render();
+          if (done) { clearInterval(timer); timer = null; emailEl.textContent = TARGET; }
+        }, 45);
+      };
+
+      // 화면에 들어왔을 때 시작
+      const io = new IntersectionObserver((es) => {
+        for (const e of es) if (e.isIntersecting) { settle(); io.disconnect(); }
+      }, { threshold: 0.4 });
+      io.observe(emailEl);
+
+      /* 안전장치 — 관찰자가 동작하지 않는 환경에서도
+         주소가 알아볼 수 없는 상태로 남지 않게 한다 */
+      setTimeout(() => { settle(); io.disconnect(); }, 12000);
+      emailEl.addEventListener("mouseenter", settle);
+    }
+  }
 
   /* ----------------------------------------------------------
      푸터 — 서울 시간

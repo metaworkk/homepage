@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Gothic+A1:wght@400;500;700;800;900&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=46">
+  <link rel="stylesheet" href="style.css?v=49">
 </head>
 <body>
 
@@ -150,13 +150,15 @@
       <div class="section-label reveal">About</div>
 
       <p class="about-statement reveal">ART · PERFORMANCE · TECHNOLOGY</p>
+      <br><br>
 
       <div class="cv reveal">
         <section class="cv-group">
           <h3 class="cv-head">Education</h3>
           <ul class="cv-list">
           <li><span class="cv-yr"></span><span>한국예술종합학교 미술원 조형예술과 인터랙티브아트 석사</span></li>
-          <li><span class="cv-yr"></span><span>한성대학교 패션디자인 / 회화(서양화) 학사 복수전공</span></li>
+          <li><span class="cv-yr"></span><span>한성대학교 회화 전공</span></li>
+          <li><span class="cv-yr"></span><span>한성대학교 패션디자인 전공</span></li>
           </ul>
         </section>
 
@@ -206,12 +208,16 @@
           <li><span class="cv-yr">2017–19</span><span>큐리오바이트 Curiobyte LAB — STEAM 교육 디렉터</span></li>
           <li><span class="cv-yr">2017–19</span><span>메타워크 METAWORK — 아트토이 공방·아트라운지 대표</span></li>
           <li><span class="cv-yr">2016–17</span><span>엑싱크 xSync — VR 하드웨어 개발 총괄</span></li>
+          <li><span class="cv-yr">2015</span><span>AIA생명-슈퍼스타K7 광고 《Mother's first song》 </span></li>
+          <li><span class="cv-yr">2014</span><span>이철헤어커커 - 트리코드 아카데미 오프닝 제작 </span></li>
+          <li><span class="cv-yr">2013</span><span>백제예대 뷰티아트학부 졸업작품 미디어아트 감독</span></li>
           </ul>
         </section>
 
         <section class="cv-group">
           <h3 class="cv-head">Awards &amp; Programs</h3>
           <ul class="cv-list">
+          <li><span class="cv-yr">2024</span><span>아르코 댄스&커넥션 선정</span></li> 
           <li><span class="cv-yr">2017</span><span>중소벤처기업부 창업지원 프로그램 선정</span></li>
           <li><span class="cv-yr">2016</span><span>한국콘텐츠진흥원 문화창조아카데미 크리에이터 선정</span></li>
           </ul>
@@ -222,8 +228,11 @@
     <!-- CONTACT -->
     <section class="section section-contact snap" id="contact">
       <div class="section-label reveal">Contact</div>
-      <p class="contact-lead serif reveal"><br></p>
-      <a class="contact-email reveal" href="mailto:meta@metawork.org" data-hover>meta@metawork.org</a>
+      <!-- 주소는 data-email 에서 읽어 글자가 제자리를 찾아가는 연출로 표시됩니다.
+           주소를 바꾸려면 data-email 과 href 를 같이 고치세요. -->
+      <a class="contact-email reveal" id="contactEmail"
+         href="mailto:meta@metawork.org"
+         data-email="meta@metawork.org" data-hover>meta@metawork.org</a>
       <div class="contact-links reveal">
         <!-- <a href="#" data-hover>Instagram</a> -->
         <!-- <a href="#" data-hover>Behance</a> -->
@@ -238,7 +247,7 @@
     <a href="#top" data-hover>Top ↑</a>
   </footer>
 
-  <script src="script.js?v=46"></script>
+  <script src="script.js?v=49"></script>
   <script>
     // 메타버스 임베드: 클릭 전엔 미리보기(비상호작용), 클릭하면 조작 활성화
     (function () {
