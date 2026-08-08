@@ -909,6 +909,14 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 .cv-group:nth-of-type(-n+2) .cv-list li { grid-template-columns: 1fr; }
 .cv-group:nth-of-type(-n+2) .cv-yr { display: none; }
 
+/* 세로가 짧은 화면(1280x720 등)에서는 CV 간격을 조여 한 화면에 넣는다 */
+@media (max-height: 820px) and (min-width: 721px) {
+  .about-statement { margin-bottom: 1rem; }
+  .cv-group { margin-bottom: 0.9rem; }
+  .cv-list li { padding: 0; line-height: 1.45; }
+  .cv-head { margin-bottom: 0.35rem; padding-bottom: 0.25rem; }
+}
+
 @media (max-width: 720px) {
   .cv { column-count: 1; }
   .cv-list li { grid-template-columns: 3.6rem 1fr; }
