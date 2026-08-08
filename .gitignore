@@ -2,6 +2,10 @@
 # 미리보기 압축본은 Cloudflare Pages 에, 원본은 R2(video.metawork.org) 에 있음.
 video/
 
+# 작업용 원본 영상. img/ 안에 두더라도 저장소에는 넣지 않는다.
+# (GitHub 는 파일당 100MB, Cloudflare Pages 는 25MB 를 넘으면 실패한다)
+img/*.mp4
+
 # 메타버스 임베드 — 별도 프로젝트(16MB 빌드 결과물)
 meta/
 

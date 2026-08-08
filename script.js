@@ -140,6 +140,17 @@
       phrases:    ["Like this post", "Save this for later", "Tag someone who", "DM me for details","Double tap", "if you agree", "comments",],
       phrasesSub: ["LOVE YOU", "thank you", "good vives only ", "life lately","take me back","No filter","Photo dump","HAPPY BIRTHDAY!"] },
 
+       /* ── 사진 작업 (궤도 윗줄) ──
+       row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
+    { row: 0, folder: "photo01", title: "국군난수체조", meta: "Mixed media with Single channel video · 2015", count: 3, desc: "Performed at 175 gallary, Seoul" },
+    { row: 0, folder: "photo02", title: "보이지 않는 리듬", meta: "Stockdata, CRT, druming machine · 2014", count: 3, desc: "시나 말투, 제스쳐, 자연 혹은 일상 모든 곳에 리듬이 있다. <br>당연히 역사적 현상, 시장가격의 변동, 주식가격 변동에도 리듬이 있다. <br>그리고 리듬은 차이와 반복을 통해 형성된다" },
+    { row: 0, folder: "photo03", title: "text2eye", meta: "자막 보조용 스마트 글라스 · 2017", count: 3, desc: "실시간 자막이 필요한 사람들을 위한 웨어러블 디바이스" },
+    { row: 0, folder: "photo04", title: "받았지만 쏘았고 쏘았지만 받았으며 받지도 쏘지도 않은것", meta: "두개의 공 쏘는 장치, 타자기 , 1ch 영상  · 2012", count: 4, desc: "" },
+    { row: 0, folder: "photo05", title: "Who’s afraid of school?", meta: "Mixed media · 2012", count: 5, desc: "" },
+    { row: 0, folder: "photo06", title: "metawork", meta: "Archival pigment print · 2024", count: 2, desc: "" },   
+    /* 사진 미정 — img/photo09/image01.jpg … 를 넣고 count 를 장수만큼 올리면 표시됩니다 */
+    { row: 0, folder: "photo09", title: "사진 작품 05", meta: "Archival pigment print · 2024", count: 0, desc: "" },
+
     { folder: "work01", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
       video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/force-poster.jpg",
       desc: "양자역학의 성격과 작용하는 물리적 힘의 관계 속에서 발생하는 비가시적인 압력 <br>Performed at 아르코예술극장 소극장, Seoul" },
@@ -176,21 +187,22 @@
     { folder: "work09", title: "작은만족", meta: "Mixed media with 2 channel video · 2015", count: 0,
       video: "video/little-web.mp4",       videoHQ: "https://video.metawork.org/little.mp4", poster: "video/little-poster.jpg",
       desc: "" },
-    { folder: "work10", title: "STOCK MARCH", meta: "Mixed media with Single channel video · 2011", count: 0,
-      video: "video/stock-march-web.mp4",  videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/stock-march-poster.jpg",
-      desc: "" },
+    { folder: "work10", title: "오프닝 시퀀스", meta: "Mixed media with Single channel video · 2014", count: 0,
+      video: "video/kuku-web.mp4",  videoHQ: "https://video.metawork.org/kuku.mp4", poster: "video/kuku-poster.jpg",
+      desc: "이철헤어커커 - 트리코드 아카데미 오프닝" },
+    { folder: "work11", title: "Mother's first song", meta: "Mixed media for commercial video · 2015", count: 0,
+      video: "video/aia-web.mp4",  videoHQ: "https://video.metawork.org/aia.mp4", poster: "video/aia-poster.jpg",
+      desc: "AIA생명-슈퍼스타K7 캠페인" },
+  
+
+    { row: 0, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "" },       
+    { row: 0, folder: "photo08", title: "큐리오바이트", meta: "STEAM education · 2016-2019", count: 7, desc: "" },
+
 
     /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
        phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
        표시 가능 문자: A-Z, 0-9, 공백, - / (한글 불가) */
 
-    /* ── 사진 작업 (궤도 윗줄) ──
-       row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
-    { row: 0, folder: "photo01", title: "STOCK MARCH", meta: "Mixed media with Single channel video · 2011", count: 3, desc: "" },
-    { row: 0, folder: "photo02", title: "보이지 않는 리듬", meta: "Stockdata, CRT, druming machine · 2014", count: 3, desc: "시나 말투, 제스쳐, 자연 혹은 일상 모든 곳에 리듬이 있다. <br>당연히 역사적 현상, 시장가격의 변동, 주식가격 변동에도 리듬이 있다. <br>그리고 리듬은 차이와 반복을 통해 형성된다" },
-    { row: 0, folder: "photo03", title: "text2eye", meta: "Archival pigment print · 2025", count: 2, desc: "실시간 자막이 필요한 사람들을 위한 웨어러블 디바이스" },
-    { row: 0, folder: "photo04", title: "받았지만 쏘았고 쏘았지만 받았으며 받지도 쏘지도 않은것", meta: "Stockdata, CRT, druming machine · 2012", count: 4, desc: "" },
-    { row: 0, folder: "photo05", title: "사진 작품 05", meta: "Archival pigment print · 2024", count: 2, desc: "" }
   ];
 
   // count/folder → 실제 경로 배열 (img/work01/image01.jpg …)
