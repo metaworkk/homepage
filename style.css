@@ -786,27 +786,8 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 }
 
 /* 히어로와 같은 구조선 */
-.wp-rule {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: var(--line);
-  pointer-events: none;
-}
-/* 구조선은 미디어 액자의 좌우 끝에 세운다 — 섹션 기준 %는 액자와 어긋난다 */
-.wp-inner { position: relative; }
-.wp-inner::before,
-.wp-inner::after {
-  content: "";
-  position: absolute;
-  top: calc(-1 * clamp(4.5rem, 10vh, 7rem));
-  bottom: calc(-1 * clamp(2.5rem, 6vh, 4rem));
-  width: 1px;
-  background: var(--line-soft);
-  pointer-events: none;
-}
-.wp-inner::before { left: 0; }
-.wp-inner::after  { right: 0; }
+
+/* 세로 구조선은 두지 않는다 — 액자를 가둬 답답해 보임. 가로선만 유지 */
 
 /* 미디어 — 가로 비율(기본 16:9, 작품별로 4:3 지정 가능) */
 .wp-media {
@@ -877,7 +858,6 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 .wp-open:hover { border-color: var(--key); color: var(--key); }
 
 @media (max-width: 820px) {
-  .wp-rule { display: none; }
   /* 세로 화면에서는 16:9가 폭에 갇히므로 좌우를 최대한 쓴다 */
   .wp-inner { width: min(94vw, calc(var(--media-h) * var(--rw, 1.778))); }
   .lb-body  { width: min(94vw, calc(var(--media-h) * 1.778)); }
