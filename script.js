@@ -495,6 +495,9 @@
       }
       lbTitle.textContent = w.title + " — " + w.meta;
       lbCounter.textContent = (lbIdx + 1) + " / " + Math.max(1, w.slides.length);
+      // 작품 설명도 함께 (desc 는 <br> 을 쓰므로 innerHTML)
+      const lbDesc = document.getElementById("lbDesc");
+      if (lbDesc) lbDesc.innerHTML = w.desc || "";
     }
 
     function lbOpen(i) {
@@ -747,18 +750,20 @@
     if (reducedMotion) {
       emailEl.textContent = TARGET;
     } else {
+      let cells = [];
+      let timer = null;
+
       // 글자마다 목표까지 돌아야 할 횟수를 달리 줘서 물결처럼 맞춰진다
-      const cells = [...TARGET].map((ch, i) => ({
-        ch,
-        fixed: FIXED.has(ch),
-        left: FIXED.has(ch) ? 0 : 6 + i * 2 + Math.floor(Math.random() * 8)
-      }));
+      const scramble = () => {
+        cells = [...TARGET].map((ch, i) => ({
+          ch,
+          left: FIXED.has(ch) ? 0 : 6 + i * 2 + Math.floor(Math.random() * 8)
+        }));
+        emailEl.textContent = render();
+      };
       const render = () =>
         cells.map((c) => (c.left <= 0 ? c.ch
           : POOL[Math.floor(Math.random() * POOL.length)])).join("");
-
-      emailEl.textContent = render();
-      let timer = null;
 
       const settle = () => {
         if (timer) return;
@@ -772,16 +777,37 @@
         }, 45);
       };
 
-      // 화면에 들어왔을 때 시작
-      const io = new IntersectionObserver((es) => {
-        for (const e of es) if (e.isIntersecting) { settle(); io.disconnect(); }
-      }, { threshold: 0.4 });
-      io.observe(emailEl);
+      const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+      // 화면 안에 조금이라도 걸치면 '보인다'로 본다
+      const visible = () => {
+        const r = emailEl.getBoundingClientRect();
+        return r.top < innerHeight && r.bottom > 0;
+      };
+      // 되돌리기는 화면에서 확실히 벗어났을 때만 (스크롤 중 깜빡임 방지)
+      const gone = () => {
+        const r = emailEl.getBoundingClientRect();
+        return r.top > innerHeight * 1.5 || r.bottom < -innerHeight * 0.5;
+      };
 
-      /* 안전장치 — 관찰자가 동작하지 않는 환경에서도
-         주소가 알아볼 수 없는 상태로 남지 않게 한다 */
-      setTimeout(() => { settle(); io.disconnect(); }, 12000);
-      emailEl.addEventListener("mouseenter", settle);
+      scramble();
+
+      /* 화면에 들어올 때마다 다시 맞춰지도록 —
+         한 번 보고 지나쳤다가 돌아와도 연출이 재생된다 */
+      let shown = false;
+      const check = () => {
+        if (visible()) {
+          if (!shown) { shown = true; settle(); }
+        } else if (shown && gone()) {
+          shown = false; stop(); scramble();     // 멀리 벗어나면 다시 흩어 놓는다
+        }
+      };
+
+      const io = new IntersectionObserver(check, { threshold: [0, 0.35, 0.7] });
+      io.observe(emailEl);
+      // 관찰자가 동작하지 않는 환경 대비 (스크롤로도 판정)
+      addEventListener("scroll", check, { passive: true });
+      emailEl.addEventListener("mouseenter", () => { shown = true; settle(); });
+      check();
     }
   }
 
