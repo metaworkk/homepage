@@ -325,8 +325,10 @@
           ' muted loop playsinline preload="none"></video>' +
           '<span class="ph-badge">VIDEO</span></div>';
       } else if (w.type === "sign" || cover) {
+        // 궤도 카드는 3D 변형된 위치라 브라우저가 "화면 안"을 제대로 판정하지 못한다.
+        // loading="lazy" 를 쓰면 화면에 있어도 로드되지 않으므로 즉시 로드시킨다.
         inner = '<div class="ph"><img src="' + (w.poster || cover) + '" alt="' + w.title +
-                '" loading="lazy"></div>';
+                '" decoding="async"></div>';
       } else {
         inner = '<div class="ph"><span class="ph-mark">✳</span>' +
                 '<span class="ph-text">IMAGE<br>대표 사진 자리</span></div>';
