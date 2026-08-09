@@ -134,15 +134,32 @@
      ---------------------------------------------------------- */
   /* 작품 설정 — 사진은 img/<folder>/image01.jpg, image02.jpg … 순서로 자동 연결.
      사진을 바꾸려면 같은 이름으로 덮어쓰기만 하면 됩니다. (img/README.md 참고)
-     count = 그 폴더에 든 사진 장수, ext = 확장자 */
+     count = 그 폴더에 든 사진 장수, ext = 확장자
+
+     folder 이름 규칙 —
+       · 작품마다 겹치지 않게 짓는다. 두 작품이 같은 이름을 쓰면
+         한쪽에 사진을 넣는 순간 다른 쪽에도 똑같이 나온다.
+       · 사진 작업은 photo01, photo02 … 순번.
+       · 영상 작업은 영상 파일명과 같은 이름을 쓴다.
+         (force → force-web.mp4, kuku → kuku-web.mp4 …)
+         번호로 부르면 작품이 빠지거나 순서가 바뀔 때 어긋난다.
+       · 영상 작업도 사진을 붙일 수 있다. img/<folder>/ 를 만들어
+         사진을 넣고 count 를 장수만큼 올리면, 라이트박스에서
+         영상이 첫 장, 사진이 그 뒤로 넘어간다. */
   /* 영상을 넣으려면 video(+poster) 한 줄만 추가하면 됩니다.
      영상이 있으면 카드가 무음 반복 재생되고, 라이트박스 첫 장으로 들어갑니다.
      count를 0으로 두면 사진 없이 영상만 있는 작품이 됩니다. */
   /* video    = 미리보기용 압축본 (카드·작품화면에서 무음 반복재생)
      videoHQ  = 클릭해서 볼 원본. R2 등 외부 저장소 주소를 넣으면 그걸 재생하고,
                 비워두면 미리보기용 압축본을 그대로 씁니다.
-     desc     = 작품 화면 캡션에 들어갈 설명. 비워두면 안내 문구가 대신 나옵니다.
+     캡션 양식 — 디테일 샷을 열면 이 순서로 나옵니다.
+       title  = 작품 제목
+       meta   = 재료·형식·연도
+       place  = 장소. "Performed at …" / "installation at …" 처럼 적습니다.
+                예전에는 desc 안에 섞여 있었는데 줄로 분리했습니다.
+       desc   = 작품 설명만. 장소는 넣지 마세요.
                 줄바꿈이 필요하면 <br> 을 쓰세요.
+                꺾쇠 < > 는 태그로 먹히니 작품명 인용은 《 》 를 쓰세요.
      videos   = 영상이 여러 편인 작품. 배열로 적으면 클릭 후 화살표로 넘겨봅니다.
                 첫 편이 카드·작품화면의 대표 영상이 됩니다.
                 videos: [{ web: "video/xx-01-web.mp4", hq: "https://video.metawork.org/xx-01.mp4" },
@@ -151,40 +168,42 @@
         /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
        phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
        표시 가능 문자: A-Z, 0-9, 공백, - / (한글 불가) */
-    { type: "sign", folder: "work10", title: "인스타그램 매니페스토",
+    { type: "sign", folder: "sign", title: "인스타그램 매니페스토",
       meta: "Split-flap display, instagram dataset · 2026", count: 0,
       poster: "video/sign-poster.jpg",
-      desc: "Performed at Web",
+      place: "Performed at Web", desc: "",
       phrases:    ["Like this post", "Save this for later", "Tag someone who", "DM me for details","Double tap", "if you agree", "comments",],
       phrasesSub: ["LOVE YOU", "thank you", "good vives only ", "life lately","take me back","No filter","Photo dump","HAPPY BIRTHDAY!"] },
 
        /* ── 사진 작업 (궤도 윗줄) ──
        row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
-    { row: 0, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, desc: " 연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작 <br>  Performed at 국립아시아문화전당, Gwang-ju" },
-    { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, desc: "한 - 벨기에 수교 120주년 기념전 <말의 머리> 전시 <br>메타버스 공간 제작 <br> installation at KF gallery, Seoul" },
-    { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제 Performed at TINC, Seoul" },
-    { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 7, desc: "메타버스 공간 제작 <br> installation at KF gallery, Seoul"  },
-    { row: 0, folder: "photo01", title: "국군난수체조", meta: "Mixed media with Single channel video · 2015", count: 3, desc: "Performed at 175 gallery, Seoul" },
-    { row: 0, folder: "photo02", title: "보이지 않는 리듬", meta: "Stockdata, CRT, druming machine · 2014", count: 3, desc: "시나 말투, 제스쳐, 자연 혹은 일상 모든 곳에 리듬이 있다. <br>당연히 역사적 현상, 시장가격의 변동, 주식가격 변동에도 리듬이 있다. <br>그리고 리듬은 차이와 반복을 통해 형성된다" },
-    { row: 0, folder: "photo03", title: "text2eye", meta: "자막 보조용 스마트 글라스 · 2017", count: 3, desc: "실시간 자막이 필요한 사람들을 위한 웨어러블 디바이스" },
-    { row: 0, folder: "photo04", title: "받았지만 쏘았고 쏘았지만 받았으며 받지도 쏘지도 않은것", meta: "두개의 공 쏘는 장치, 타자기 , 1ch 영상  · 2012", count: 4, desc: "" },
+    { row: 0, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, place: "Performed at 국립아시아문화전당, Gwang-ju", desc: "연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작" },
+    { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
+    { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, place: "Performed at TINC, Seoul", desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제" },
+    { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 7, place: "Installation at KF gallery, Seoul", desc: "메타버스 공간 제작"  },
+    { row: 0, folder: "photo01", title: "국군난수체조 - 암호화된 숫자로 구성된 건강한 신체를 위한 체조 비디오.", meta: "Mixed media with Single channel video · 2015", count: 3, place: "Performed at 175 gallery, Seoul", desc: "국군 난수체조는 단파라디오로 수집한 난수방송의 숫자를 신체의 움직임으로 변환한 비디오 작업이다. 난수방송의 숫자는 해독 체계를 공유하지 않는 사람에게는 의미 없는 나열이지만, 특정한 수신자에게는 행동을 지시하는 정보가 된다. 수집된 숫자는 무용과 운동의 기호로 변환되고, 다시 국군도수체조의 동작으로 구성된다. 숫자에서 기호로, 기호에서 신체로 옮겨가면서 읽을 수 없었던 정보는 또 다른 방식의 수행 가능한 명령이 된다." },
+    { row: 0, folder: "photo02", title: "Stock phase", meta: "Stockdata, CRT, druming machine · 2014", count: 3, desc: "시나 말투, 제스처, 자연과 일상의 모든 곳에는 리듬이 있다. 역사적 현상과 시장가격, 주식가격의 변화 역시 차이와 반복을 통해 리듬을 만들어낸다. Stock Phase는 실시간 주식 데이터를 받아 영상과 사운드를 생성하는 작업이다. 체결 강도와 가격의 움직임은 알고리즘을 거치며 서로 다른 시청각적 리듬으로 변환된다. 숫자로 기록되던 변화가 이미지와 소리로 반복되고 변주될 때, 시장의 움직임은 정보와는 다른 방식으로 감각된다. 나는 그 과정에서 만들어지는 일종의 리듬의 메아리에 관심을 두었다." },
+    { row: 0, folder: "photo03", title: "text2eye", meta: "자막 보조용 스마트 글라스 · 2017", count: 3, desc: "실시간 자막이 필요한 사람들을 위한 웨어러블 디바이스 이다. 장애인이나,뮤지션의 해외 공연등 의사 소통이 실시간으로 필요한 경우에 상황에 맞게 반응 하는 자막을 볼수 있어 사람들에게 편리함을 제공해 준다" },
+    { row: 0, folder: "photo04", title: "받았지만 쏘았고 쏘았지만 받았으며 받지도 쏘지도 않은것", meta: "두개의 공 쏘는 장치, 타자기 , 1ch 영상  · 2012", count: 4, desc: "공을 던지는 사건에는 분명한 순서가 있다. 던지고, 날아가고, 도착한다. 우리는 이 연속된 움직임을 하나의 인과적인 사건으로 이해하고, 다시 언어의 순서로 옮긴다. 이 작업에서 두 개의 장치는 공을 계속해서 주고받는다. 도착은 다시 다음 발사의 조건이 되고, 결과는 곧 새로운 원인이 된다. 그 사이에 놓인 타자기는 반복되는 움직임을 문장으로 옮기며 사건에 앞과 뒤의 순서를 부여한다. 그러나 왕복이 계속될수록 그 순서는 되감기고 겹쳐진다. 결과는 다음 원인이 되고, 시작과 끝은 반복 안에서 더 이상 같은 위치에 머물지 않는다." },
     { row: 0, folder: "photo05", title: "Who’s afraid of school?", meta: "Mixed media · 2012", count: 5, desc: "" },
     { row: 0, folder: "photo06", title: "metawork", meta: "Artcenter for education · 2015", count: 2, desc: "" },   
     /* 사진 미정 — img/photo09/image01.jpg … 를 넣고 count 를 장수만큼 올리면 표시됩니다 */
-    { row: 0, folder: "photo09", title: "penetration", meta: "Mixed media · 2012", count: 3, desc: "" },
+    { row: 0, folder: "photo09", title: "Permeation", meta: "Mixed media · 2012", count: 3, desc: "침투는 일본 대지진 이후의 방사능 누출에서 시작된 작업이다. 방사능은 직접 감각할 수 없지만, 측정되고 숫자로 기록된다. 실시간 방사능 수치는 비규칙적인 시각 패턴으로 변환되고, 프로젝션 매핑을 통해 공간의 여러 표면 위로 확장된다. 하나의 수치에서 시작된 이미지는 특정한 경계를 갖지 않은 채 벽과 구조물, 공간을 따라 계속해서 다른 형태로 나타난다." },
     { row: 0, folder: "photo11", title: "The Emperor's New Clothes", meta: "Mixed media · 2012", count: 7, desc: "" },
-    { row: 0, folder: "photo10", title: "ride it", meta: "Mixed media · 2011", count: 4, desc: "Performed at 백남준아트센터, Gyeonggi" },
+    { row: 0, folder: "photo10", title: "Just ride it, 5 인터-락트-큐터스(5 Interloc(k)utors) remix", meta: "Mixed media · 2010", count: 4, place: "Performed at 백남준아트센터, Gyeonggi", desc: " Just Ride It은 2010년 백남준아트센터 《랜덤 액세스》에서 Tammy Kim의 〈5 Interloc(k)utors〉에 개입한 작업이다. 원작은 신체의 높이와 시선의 방향을 조정해 권력의 위치를 역전시킨다. Just Ride It은 그 물리적인 역전을 한 단계 더 밀어, 구조물 자체를 올라타고 움직이는 대상으로 바꾼다. 위계를 조정하던 장치는 하나의 탈것이 된다." },
     
    
 
-    { folder: "work01", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
+    { folder: "force", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
       video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/force-poster.jpg",
-      desc: "양자역학의 성격과 작용하는 물리적 힘의 관계 속에서 발생하는 비가시적인 압력 <br>Performed at 아르코예술극장 소극장, Seoul" },
-    { folder: "work02", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
+      place: "Performed at 아르코예술극장 소극장, Seoul",
+      desc: "양자역학의 성격과 작용하는 물리적 힘의 관계 속에서 발생하는 비가시적인 압력" },
+    { folder: "adg7", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
       video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
-      desc: "Performed PAMS CHOICE 악단광칠 NEXT JOURNEY at 남산국악당, Seoul" },  
+      place: "Performed at 남산국악당, Seoul",
+      desc: "PAMS CHOICE 악단광칠 NEXT JOURNEY" },
     /* 영상이 여러 편인 작품 — 편을 추가하려면 videos 배열에 한 줄씩 넣으면 됩니다 */
-    { folder: "work03", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
+    { folder: "float", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
       videos: [
         { web: "video/float-01-web.mp4", hq: "https://video.metawork.org/float-01.mp4" },
         { web: "video/float-02-web.mp4", hq: "https://video.metawork.org/float-02.mp4" },
@@ -194,31 +213,37 @@
         { web: "video/float-06-web.mp4", hq: "https://video.metawork.org/float-06.mp4" }
       ],
       poster: "video/float-poster.jpg",
-      desc: "멜랑콜리 컴퍼니 - 테스트드라이브 작품 내 홀로그램 프로젝트 <br> Performed at 아르코예술극장 대극장, Seoul" },
-    // { folder: "work04", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 0,
+      place: "Performed at 아르코예술극장 대극장, Seoul",
+      desc: "멜랑콜리 컴퍼니 - 테스트드라이브 작품 내 홀로그램 프로젝트" },
+    // { folder: "arko", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 0,
     //   video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/arko-poster.jpg",
     //   desc: " 연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작 <br>  Performed at 국립아시아문화전당, Gwang-ju"},
-    { folder: "work05", title: "30주년기념전시", meta: "Metaverse project in VRCHAT · 2022", count: 0,
+    { folder: "kf", title: "30주년기념전시", meta: "Metaverse project in VRCHAT · 2022", count: 0,
       video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/KF-poster.jpg",
-      desc: "메타버스 공간 제작 <br> installation at KF gallery, Seoul" },
-    //{ folder: "work06", title: "말의 머리" , meta: "Metaverse project in Roblox · 2021", count: 0,
+      place: "Installation at KF gallery, Seoul",
+      desc: "메타버스 공간 제작" },
+    //{ folder: "horsehead", title: "말의 머리" , meta: "Metaverse project in Roblox · 2021", count: 0,
     //  video: "video/horsehead-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
     //  desc: "Performed at Roblox" },
-    // { folder: "work07", title: "I'm the church" , meta: "VR project for theater performance · 2021", count: 0,
+    // { folder: "church", title: "I'm the church" , meta: "VR project for theater performance · 2021", count: 0,
       // video: "video/church-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
       // desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제 Performed at TINC, Seoul" },
-    { folder: "work08", title: "My room - 방구석대모험", meta: "Metaverse project in VRchat · 2021", count: 0,
+    { folder: "room", title: "My room - 방구석대모험", meta: "Metaverse project in VRchat · 2021", count: 0,
       video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/room-poster.jpg",
-      desc: "arte 한국문화예술교육진흥원 비대면 VR 교육프로그램 <br> Performed at VRchat" },
+      place: "Performed at VRchat",
+      desc: "arte 한국문화예술교육진흥원 비대면 VR 교육프로그램" },
     /* 영상을 바꿀 때는 파일명도 바꾼다 — 이름이 같으면 브라우저가 예전 것을 계속 보여준다.
        (사진과 달리 영상에는 ?v= 캐시 무력화를 걸지 않는다. 용량이 커서) */
-    { folder: "work09", title: "작은만족", meta: "Mixed media with 2 channel video · 2015", count: 0,
+    { folder: "little2", title: "작은만족", meta: "Mixed media with 2 channel video · 2015", count: 0,
       video: "video/little2-web.mp4",      videoHQ: "https://video.metawork.org/little2.mp4", poster: "video/little2-poster.jpg",
       desc: "" },
-    { folder: "work10", title: "오프닝 시퀀스", meta: "Mixed media with Single channel video · 2014", count: 0,
+    { folder: "stock-march", title: "Stock march", meta: "Mixed media with 2 channel video · 2011", count: 0,
+      video: "video/stock-march-web.mp4", videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/stock-march-poster.jpg",
+      desc: "Stock March는 연평도 사건 당시, 사회적 긴장과는 반대로 상승하던 국방 관련 주식의 움직임에서 시작되었다. 코스피 지수, 국방 관련 종목, 그리고 직접 보유하고 있던 주식의 가격 변화를 데이터로 받아 사운드로 변환했다. 수치의 변화는 일정한 규칙과 확률적 변형을 거치며 예측하기 어려운 음의 흐름을 만들어낸다. 생성된 사운드는 다시 악보의 형태로 옮겨진다. 시장의 움직임은 숫자에서 소리로, 다시 기호로 번역된다." },
+    { folder: "kuku", title: "오프닝 시퀀스", meta: "Mixed media with Single channel video · 2014", count: 0,
       video: "video/kuku-web.mp4",  videoHQ: "https://video.metawork.org/kuku.mp4", poster: "video/kuku-poster.jpg",
       desc: "이철헤어커커 - 트리코드 아카데미 오프닝" },
-    { folder: "work11", title: "Mother's first song", meta: "Mixed media for commercial video · 2015", count: 0,
+    { folder: "aia", title: "Mother's first song", meta: "Mixed media for commercial video · 2015", count: 0,
       video: "video/aia-web.mp4",  videoHQ: "https://video.metawork.org/aia.mp4", poster: "video/aia-poster.jpg",
       desc: "AIA생명-슈퍼스타K7 캠페인" },
   
@@ -395,9 +420,12 @@
       sec.innerHTML =
         '<div class="wp-inner">' +
           '<div class="wp-media' + (w.type === "sign" ? ' wp-media--sign' : '') + '">' + media + "</div>" +
+          /* 지금은 CSS 로 감춰 두었다 (.wp-meta { display:none }).
+             같은 내용을 디테일 샷에서 보여 주므로 양식도 같게 유지한다. */
           '<div class="wp-meta">' +
             '<h3 class="wp-title">' + w.title + "</h3>" +
             '<p class="wp-info">' + w.meta + "</p>" +
+            '<p class="wp-place">' + (w.place || "") + "</p>" +
             '<p class="wp-desc">' + (w.desc ||
               "여기에 작품 설명을 적어주세요. 무엇을 담고 싶었는지, 어떤 재료와 과정을 거쳤는지.") +
             "</p>" +
@@ -720,7 +748,44 @@
     const lbSlide = document.getElementById("lbSlide");
     const lbTitle = document.getElementById("lbTitle");
     const lbCounter = document.getElementById("lbCounter");
+    const lbBody = document.querySelector(".lb-body");
     let lbWork = 0, lbIdx = 0;
+
+    /* 캡션 폭 고정 —
+       캡션이 지금 보고 있는 사진의 폭을 따라가면, 가로 사진에서 세로 사진으로
+       넘길 때마다 글의 줄바꿈이 다시 잡혀 읽던 자리를 놓친다.
+       그래서 그 작품의 '첫 장' 폭을 열 때 한 번 재서 붙들어 둔다.
+       뒤 사진이 더 좁아도(세로) 캡션은 그대로, 사진만 가운데에서 줄어든다. */
+    let lbFirstRatio = 0;   // 첫 장의 가로/세로 비율
+
+    function lbApplyWidth() {
+      if (!lbBody) return;
+      if (!lbFirstRatio) { lbBody.style.removeProperty("--lb-w"); return; }
+      // CSS 의 max-height:68svh · max-width:88vw 와 같은 제한을 그대로 계산한다
+      const w = Math.min(window.innerWidth * 0.88, window.innerHeight * 0.68 * lbFirstRatio);
+      lbBody.style.setProperty("--lb-w", Math.round(w) + "px");
+    }
+
+    /* 첫 장이 로드되면 그 비율을 기억한다. 로드 전에는 폭을 풀어 두어
+       예전처럼 사진을 따라가게 두고, 로드되는 즉시 고정된다. */
+    function lbMeasureFirst() {
+      lbFirstRatio = 0;
+      lbApplyWidth();
+      const el = lbSlide.querySelector("img, video");
+      if (!el) return;
+      const read = () => {
+        const w = el.naturalWidth || el.videoWidth;
+        const h = el.naturalHeight || el.videoHeight;
+        if (w && h) { lbFirstRatio = w / h; lbApplyWidth(); }
+      };
+      if (el.tagName === "IMG") {
+        if (el.complete && el.naturalWidth) read();
+        else el.addEventListener("load", read, { once: true });
+      } else {
+        if (el.videoWidth) read();
+        else el.addEventListener("loadedmetadata", read, { once: true });
+      }
+    }
 
     function lbRender() {
       const w = WORKS[lbWork];
@@ -737,9 +802,14 @@
       } else {
         lbSlide.innerHTML = '<img src="' + bust(slide.src) + '" alt="' + w.title + '">';
       }
-      lbTitle.textContent = w.title + " — " + w.meta;
+      /* 작품 화면에는 글을 두지 않고, 디테일 샷을 열었을 때 여기서 보여 준다.
+         제목 · 재료/연도 · 설명 순서. (desc 는 <br> 을 쓰므로 innerHTML) */
+      lbTitle.textContent = w.title;
       lbCounter.textContent = (lbIdx + 1) + " / " + Math.max(1, w.slides.length);
-      // 작품 설명도 함께 (desc 는 <br> 을 쓰므로 innerHTML)
+      const lbMeta = document.getElementById("lbMeta");
+      if (lbMeta) lbMeta.textContent = w.meta || "";
+      const lbPlace = document.getElementById("lbPlace");
+      if (lbPlace) lbPlace.textContent = w.place || "";
       const lbDesc = document.getElementById("lbDesc");
       if (lbDesc) lbDesc.innerHTML = w.desc || "";
     }
@@ -749,6 +819,7 @@
       lbIdx = 0;
       if (hoverBg) hoverBg.classList.remove("show"); // 팝업 열리면 배경 미리보기 끔
       lbRender();
+      lbMeasureFirst();   // 캡션 폭은 이 작품의 첫 장 기준으로 붙들어 둔다
       lightbox.classList.add("open");
       lightbox.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
@@ -756,6 +827,8 @@
 
     function lbClose() {
       lbSlide.innerHTML = "";   // 재생 중이던 영상·소리를 확실히 정지
+      lbFirstRatio = 0;
+      lbApplyWidth();           // 다음에 열 작품이 폭을 새로 정하도록 되돌린다
       lightbox.classList.remove("open");
       lightbox.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
@@ -795,6 +868,10 @@
     document.getElementById("lbNext").addEventListener("click", () => lbStep(1));
     lightbox.addEventListener("click", (e) => {
       if (e.target === lightbox) lbClose();
+    });
+    // 창 크기가 바뀌면 고정해 둔 폭도 같은 비율로 다시 잡는다
+    window.addEventListener("resize", () => {
+      if (lightbox.classList.contains("open")) lbApplyWidth();
     });
     window.addEventListener("keydown", (e) => {
       if (!lightbox.classList.contains("open")) return;

@@ -608,19 +608,25 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 }
 .pg-item:hover { opacity: 1; outline-color: var(--key); }
 
-/* 제목은 평소엔 감추고 마우스를 올렸을 때만 (구 방식의 .card-hover 와 같은 규칙) */
+/* 제목은 평소엔 감추고 마우스를 올렸을 때만.
+   궤도 방식의 .card-hover 와 같은 연출 — 사진 위에 키컬러가 덮이고
+   제목이 가운데에 놓인다. (아래 .card-hover 와 규칙을 맞춰 둘 것) */
 .pg-item figcaption {
   position: absolute;
-  inset: auto 0 0 0;
-  padding: 0.5rem 0.55rem 0.45rem;
-  font-size: var(--fs-micro);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  background: rgba(74, 91, 255, 0.42);   /* 연한 키컬러 */
+  color: #fff;
+  text-align: center;
+  font-size: clamp(0.6rem, 1.1vw, 0.85rem);
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: var(--tight);
-  color: var(--ink);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0));
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 .pg-item:hover figcaption { opacity: 1; }
@@ -790,12 +796,15 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 }
 .lightbox.open { opacity: 1; visibility: visible; }
 .lb-body {
-  /* 폭은 작품이 정한다 — 16:9 상자에 맞추면 세로 사진이 화면 높이까지 늘어난다 */
-  width: fit-content;
+  /* 폭은 작품이 정한다 — 16:9 상자에 맞추면 세로 사진이 화면 높이까지 늘어난다.
+     --lb-w 는 그 작품의 첫 사진 폭. 넘겨보는 동안 캡션이 흔들리지 않도록
+     스크립트가 열 때 한 번 재서 넣어 준다. (없으면 예전처럼 사진을 따라간다) */
+  width: var(--lb-w, fit-content);
   max-width: 88vw;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  /* 줄 간격은 각 줄이 직접 정한다 (제목·재료·장소는 붙어야 하므로) */
+  gap: 0;
 }
 .lb-slide {
   display: flex;
@@ -813,22 +822,62 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   height: auto;
   object-fit: contain;
 }
+/* 디테일 샷 캡션 — 제목 · 재료 · 장소 는 붙여서 한 덩어리로,
+   작품 설명만 한 칸 띄운다.
+
+   폭은 사진을 따른다. .lb-body 가 fit-content 라 글이 길면 캡션이
+   상자를 넓혀 사진보다 넓어져 버린다. width:0 으로 폭 계산에서 빠지게
+   한 뒤 min-width 로 사진 폭을 채우게 하면, 글은 사진 폭에서 줄바꿈된다. */
+.lb-info,
+.lb-meta,
+.lb-place,
+.lb-desc {
+  width: 0;
+  min-width: 100%;
+  max-width: none;
+}
+
 .lb-desc {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.6;
   color: var(--ink-soft);
-  max-width: 62ch;
-  margin-top: 0.5rem;
+  margin-top: 0.9rem;
 }
+.lb-desc:empty { display: none; }
+
+.lb-meta,
+.lb-place {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: var(--lh-body);
+  letter-spacing: var(--loose);
+  color: var(--ink-soft);
+  margin-top: 0;
+}
+.lb-meta:empty,
+.lb-place:empty { display: none; }
+
 .lb-info {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 1rem;
+  /* 사진과 캡션 사이만 띄운다 */
+  margin-top: 0.9rem;
   font-size: var(--fs-micro);
   letter-spacing: var(--tight);
   text-transform: uppercase;
   color: var(--ink-soft);
+}
+/* 제목 — 크기는 재료·장소·설명과 같게 두고 굵기와 색으로만 구분한다 */
+.lb-title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: var(--lh-body);
+  letter-spacing: var(--loose);
+  text-transform: none;
+  color: var(--ink);
 }
 .lb-close, .lb-arrow {
   background: none;
@@ -937,8 +986,14 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   .wp-media { margin-left: auto; margin-right: auto; }
 }
 
-/* 캡션 — 사진 바로 아래, 왼쪽 정렬. 제목·설명 글자 크기 동일 */
-.wp-meta {
+/* 캡션 — 작품 화면에서는 감춘다.
+   제목·정보·설명은 사진을 눌러 라이트박스(디테일 샷)를 열었을 때 보여 준다.
+   화면에서는 작품 자체만 보이도록 두고, 글은 볼 마음이 있을 때 꺼내 보는 방식.
+   마크업은 남겨 두므로 다시 보이게 하려면 이 규칙만 지우면 된다. */
+.wp-meta { display: none; }
+
+/* 라이트박스에서 쓰는 캡션 배치 (위 규칙을 되돌릴 때 함께 쓰던 값) */
+.wp-meta--shown {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -949,6 +1004,8 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   text-align: left;
   width: 100%;
 }
+.wp-place:empty { display: none; }
+.wp-place { font-size: 1rem; font-weight: 500; color: var(--ink-soft); }
 .wp-title,
 .wp-info,
 .wp-desc {
