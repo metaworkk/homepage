@@ -160,10 +160,10 @@
 
        /* ── 사진 작업 (궤도 윗줄) ──
        row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
-    { row: 0, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 3, desc: " 연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작 <br>  Performed at 국립아시아문화전당, Gwang-ju" },
-    { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 3, desc: "한 - 벨기에 수교 120주년 기념전 <말의 머리> 전시 <br>메타버스 공간 제작 <br> installation at KF gallery, Seoul" },
-    { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 3, desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제 Performed at TINC, Seoul" },
-    { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 3, desc: "메타버스 공간 제작 <br> installation at KF gallery, Seoul"  },
+    { row: 0, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, desc: " 연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작 <br>  Performed at 국립아시아문화전당, Gwang-ju" },
+    { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, desc: "한 - 벨기에 수교 120주년 기념전 <말의 머리> 전시 <br>메타버스 공간 제작 <br> installation at KF gallery, Seoul" },
+    { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제 Performed at TINC, Seoul" },
+    { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 7, desc: "메타버스 공간 제작 <br> installation at KF gallery, Seoul"  },
     { row: 0, folder: "photo01", title: "국군난수체조", meta: "Mixed media with Single channel video · 2015", count: 3, desc: "Performed at 175 gallery, Seoul" },
     { row: 0, folder: "photo02", title: "보이지 않는 리듬", meta: "Stockdata, CRT, druming machine · 2014", count: 3, desc: "시나 말투, 제스쳐, 자연 혹은 일상 모든 곳에 리듬이 있다. <br>당연히 역사적 현상, 시장가격의 변동, 주식가격 변동에도 리듬이 있다. <br>그리고 리듬은 차이와 반복을 통해 형성된다" },
     { row: 0, folder: "photo03", title: "text2eye", meta: "자막 보조용 스마트 글라스 · 2017", count: 3, desc: "실시간 자막이 필요한 사람들을 위한 웨어러블 디바이스" },
