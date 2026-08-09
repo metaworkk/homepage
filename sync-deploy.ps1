@@ -99,7 +99,10 @@ $html = Join-Path $Root "index.html"
 $rawOriginal = Get-Content $html -Raw -Encoding UTF8
 $raw  = $rawOriginal
 $cur  = [regex]::Match($raw, 'style\.css\?v=(\d+)').Groups[1].Value
-$next = [int]$cur + 1
+# 배포 후 index.html을 원래대로 복원하므로 단순 +1은 다음 배포에서도 같은
+# 번호를 만들 수 있다. UTC epoch 초를 써서 배포마다 고유한 캐시 키를 만든다.
+$next = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+if ($cur -and $next -le [int64]$cur) { $next = [int64]$cur + 1 }
 $raw  = $raw -replace 'style\.css\?v=\d+',  "style.css?v=$next"
 $raw  = $raw -replace 'script\.js\?v=\d+', "script.js?v=$next"
 # 메타버스 임베드도 같이. 이게 없으면 브라우저가 예전 meta/index.html 을 계속 쓰는데,
