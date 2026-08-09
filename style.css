@@ -1074,6 +1074,7 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 .tx-title {
   font-size: 1.375rem;
   font-weight: 700;
+  font-style: italic;      /* 아래 형식·연도 줄과 같은 이탤릭 */
   line-height: var(--lh-body);
   letter-spacing: var(--loose);
   color: var(--ink);

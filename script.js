@@ -181,7 +181,7 @@
     { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
     { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, place: "Performed at TINC, Seoul", desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제" },
     { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "메타버스 아바타 제작"  },
-    { row: 0, folder: "photo01", title: "국군난수체조 - 암호화된 숫자로 구성된 건강한 신체를 위한 체조 비디오.", meta: "Mixed media with Single channel video · 2015", count: 3, place: "Performed at 175 gallery, Seoul", desc: "국군 난수체조는 단파라디오로 수집한 난수방송의 숫자를 신체의 움직임으로 변환한 비디오 작업이다. 난수방송의 숫자는 해독 체계를 공유하지 않는 사람에게는 의미 없는 나열이지만, 특정한 수신자에게는 행동을 지시하는 정보가 된다. 수집된 숫자는 무용과 운동의 기호로 변환되고, 다시 국군도수체조의 동작으로 구성된다. 숫자에서 기호로, 기호에서 신체로 옮겨가면서 읽을 수 없었던 정보는 또 다른 방식의 수행 가능한 명령이 된다." },
+    { row: 0, folder: "photo01", title: "국군난수체조 - 암호화된 숫자로 구성된 건강한 신체를 위한 체조 비디오", meta: "Mixed media with Single channel video · 2015", count: 3, place: "Performed at 175 gallery, Seoul", desc: "국군 난수체조는 단파라디오로 수집한 난수방송의 숫자를 신체의 움직임으로 변환한 비디오 작업이다. 난수방송의 숫자는 해독 체계를 공유하지 않는 사람에게는 의미 없는 나열이지만, 특정한 수신자에게는 행동을 지시하는 정보가 된다. 수집된 숫자는 무용과 운동의 기호로 변환되고, 다시 국군도수체조의 동작으로 구성된다. 숫자에서 기호로, 기호에서 신체로 옮겨가면서 읽을 수 없었던 정보는 또 다른 방식의 수행 가능한 명령이 된다." },
     { row: 0, folder: "photo02", title: "Stock phase", meta: "Stockdata, CRT, druming machine · 2014", count: 3, desc: "시나 말투, 제스처, 자연과 일상의 모든 곳에는 리듬이 있다. 역사적 현상과 시장가격, 주식가격의 변화 역시 차이와 반복을 통해 리듬을 만들어낸다. Stock Phase는 실시간 주식 데이터를 받아 영상과 사운드를 생성하는 작업이다. 체결 강도와 가격의 움직임은 알고리즘을 거치며 서로 다른 시청각적 리듬으로 변환된다. 숫자로 기록되던 변화가 이미지와 소리로 반복되고 변주될 때, 시장의 움직임은 정보와는 다른 방식으로 감각된다. 나는 그 과정에서 만들어지는 일종의 리듬의 메아리에 관심을 두었다." },
     { row: 0, folder: "photo03", title: "text2eye", meta: "자막 보조용 스마트 글라스 · 2017", count: 3, desc: "실시간 자막이 필요한 사람들을 위한 웨어러블 디바이스 이다. 장애인이나,뮤지션의 해외 공연등 의사 소통이 실시간으로 필요한 경우에 상황에 맞게 반응 하는 자막을 볼수 있어 사람들에게 편리함을 제공해 준다" },
     { row: 0, folder: "photo04", title: "받았지만 쏘았고 쏘았지만 받았으며 받지도 쏘지도 않은것", meta: "두개의 공 쏘는 장치, 타자기 , 1ch 영상  · 2012", count: 4, desc: "공을 던지는 사건에는 분명한 순서가 있다. 던지고, 날아가고, 도착한다. 우리는 이 연속된 움직임을 하나의 인과적인 사건으로 이해하고, 다시 언어의 순서로 옮긴다. 이 작업에서 두 개의 장치는 공을 계속해서 주고받는다. 도착은 다시 다음 발사의 조건이 되고, 결과는 곧 새로운 원인이 된다. 그 사이에 놓인 타자기는 반복되는 움직임을 문장으로 옮기며 사건에 앞과 뒤의 순서를 부여한다. 그러나 왕복이 계속될수록 그 순서는 되감기고 겹쳐진다. 결과는 다음 원인이 되고, 시작과 끝은 반복 안에서 더 이상 같은 위치에 머물지 않는다." },
@@ -189,7 +189,7 @@
     { row: 0, folder: "photo06", title: "metawork", meta: "Artcenter for education · 2015", count: 2, desc: "" },   
     /* 사진 미정 — img/photo09/image01.jpg … 를 넣고 count 를 장수만큼 올리면 표시됩니다 */
     { row: 0, folder: "photo09", title: "Permeation", meta: "Mixed media · 2012", count: 3, desc: "침투는 일본 대지진 이후의 방사능 누출에서 시작된 작업이다. 방사능은 직접 감각할 수 없지만, 측정되고 숫자로 기록된다. 실시간 방사능 수치는 비규칙적인 시각 패턴으로 변환되고, 프로젝션 매핑을 통해 공간의 여러 표면 위로 확장된다. 하나의 수치에서 시작된 이미지는 특정한 경계를 갖지 않은 채 벽과 구조물, 공간을 따라 계속해서 다른 형태로 나타난다." },
-    { row: 0, folder: "photo11", title: "The Emperor's New Clothes", meta: "Mixed media · 2012", count: 7, desc: "" },
+    { row: 0, folder: "photo11", title: "The Emperor's New Clothes", meta: "Mixed media · 2012", count: 7, desc: "카메라 앞을 지나는 사람의 모습은 그대로 재현되지 않는다. 인물의 형태와 표정, 옷과 같은 시각적 정보는 색을 구성하는 수치로 변환되고, 이 데이터는 다시 공간 위에 추상적인 이미지로 매핑된다. 관객은 자신의 모습을 보고 있지만, 화면에는 더 이상 자신을 알아볼 수 있는 이미지가 남아 있지 않는다." },
     { row: 0, folder: "photo10", title: "Just ride it, 5 인터-락트-큐터스(5 Interloc(k)utors) remix", meta: "Mixed media · 2010", count: 4, place: "Performed at 백남준아트센터, Gyeonggi", desc: " Just Ride It은 2010년 백남준아트센터 《랜덤 액세스》에서 Tammy Kim의 〈5 Interloc(k)utors〉에 개입한 작업이다. 원작은 신체의 높이와 시선의 방향을 조정해 권력의 위치를 역전시킨다. Just Ride It은 그 물리적인 역전을 한 단계 더 밀어, 구조물 자체를 올라타고 움직이는 대상으로 바꾼다. 위계를 조정하던 장치는 하나의 탈것이 된다." },
     
    
@@ -214,29 +214,29 @@
       ],
       poster: "video/float-poster.jpg",
       place: "Performed at 아르코예술극장 대극장, Seoul",
-      desc: "멜랑콜리 컴퍼니 - 테스트드라이브 작품 내 홀로그램 프로젝트" },
+      desc: "멜랑콜리 컴퍼니 - 테스트드라이브 작품 내 홀로그램 프로젝트, 유기적 움직임 실험" },
     // { folder: "arko", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 0,
     //   video: "video/arko-web.mp4",         videoHQ: "https://video.metawork.org/arko.mp4", poster: "video/arko-poster.jpg",
     //   desc: " 연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작 <br>  Performed at 국립아시아문화전당, Gwang-ju"},
-    { folder: "kf", title: "30주년기념전시", meta: "Metaverse project in VRCHAT · 2022", count: 0,
+    { folder: "kf", title: "KF 창립 30주년 기념 특별전 [이음]", meta: "Metaverse project in VRCHAT · 2021", count: 1,
       video: "video/KF-web.mp4",           videoHQ: "https://video.metawork.org/KF.mp4", poster: "video/KF-poster.jpg",
       place: "Installation at KF gallery, Seoul",
-      desc: "메타버스 공간 제작" },
+      desc: "지난 30년간의 한국국제교류재단의 히스토리를 아카이빙함과 동시에 미래 비전을 만나볼 수 있는 전시로, 실제 전시의 공간을 메타버스 공간으로 제작하였습니다 <br> https://www.youtube.com/watch?v=LmrBQT2jwYQ" },
     //{ folder: "horsehead", title: "말의 머리" , meta: "Metaverse project in Roblox · 2021", count: 0,
     //  video: "video/horsehead-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
     //  desc: "Performed at Roblox" },
     // { folder: "church", title: "I'm the church" , meta: "VR project for theater performance · 2021", count: 0,
       // video: "video/church-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
       // desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제 Performed at TINC, Seoul" },
-    { folder: "room", title: "My room - 방구석대모험", meta: "Metaverse project in VRchat · 2021", count: 0,
+    { folder: "room", title: "내 방 - 방구석대모험", meta: "Metaverse project in VRchat · 2021", count: 0,
       video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/room-poster.jpg",
       place: "Performed at VRchat",
       desc: "arte 한국문화예술교육진흥원 비대면 VR 교육프로그램" },
     /* 영상을 바꿀 때는 파일명도 바꾼다 — 이름이 같으면 브라우저가 예전 것을 계속 보여준다.
        (사진과 달리 영상에는 ?v= 캐시 무력화를 걸지 않는다. 용량이 커서) */
-    { folder: "little2", title: "작은만족", meta: "Mixed media with 2 channel video · 2015", count: 0,
+    { folder: "little2", title: "A Small Satisfaction", meta: "Mixed media with 2 channel video · 2015", count: 0,
       video: "video/little2-web.mp4",      videoHQ: "https://video.metawork.org/little2.mp4", poster: "video/little2-poster.jpg",
-      desc: "" },
+      desc: "〈작은 만족〉은 실시간 주식 데이터를 이용한 〈Stock Phase〉에서 이어진 작업이다. 시장의 체결강도를 중심으로 설정된 특정 조건이 충족되면, 네 종류의 동물 사냥 장면이 드럼 사운드와 함께 재생된다.각 장면은 정방향과 역방향을 반복하며 포식자가 먹이를 쫓고 포획하는 순간을 계속해서 되돌린다. 사냥은 완결되지 않고, 획득과 철회가 짧은 주기로 반복된다. 영상의 자막은 작은 가격 변동에서 반복적으로 수익을 취하는 거래 방식인 ‘스캘핑(scalping)’이라는 말의 유래를 따라간다. 시장의 수치는 가격을 설명하는 정보에서 벗어나 사냥 장면을 작동시키는 신호가 된다. 순간적인 차이를 포착하고 곧 다시 다음 기회를 기다리는 움직임은, 잡고 놓치고 다시 쫓는 이미지의 반복과 겹쳐진다." },
     { folder: "stock-march", title: "Stock march", meta: "Mixed media with 2 channel video · 2011", count: 1,
       video: "video/stock-march-web.mp4?v=20260809", videoHQ: "https://video.metawork.org/stock-march.mp4?v=20260809", poster: "video/stock-march-poster.jpg",
       desc: "Stock March는 연평도 사건 당시, 사회적 긴장과는 반대로 상승하던 국방 관련 주식의 움직임에서 시작되었다. 코스피 지수, 국방 관련 종목, 그리고 직접 보유하고 있던 주식의 가격 변화를 데이터로 받아 사운드로 변환했다. 수치의 변화는 일정한 규칙과 확률적 변형을 거치며 예측하기 어려운 음의 흐름을 만들어낸다. 생성된 사운드는 다시 악보의 형태로 옮겨진다. 시장의 움직임은 숫자에서 소리로, 다시 기호로 번역된다." },
@@ -248,7 +248,7 @@
       desc: "AIA생명-슈퍼스타K7 캠페인" },
   
 
-    { row: 0, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "" },       
+    { row: 0, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "국민대학교는 2023년 성북구청과 함께 관내 중학생들을 대상으로 '2023 인공지능 미래탐색' 진로교육을 진행" },       
     { row: 0, folder: "photo08", title: "큐리오바이트", meta: "STEAM education · 2016-2019", count: 7, desc: "" },
 
 
