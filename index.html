@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Gothic+A1:wght@400;500;700;800;900&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=64">
+  <link rel="stylesheet" href="style.css?v=74">
 </head>
 <body>
 
@@ -122,6 +122,16 @@
       <!-- 마우스오버 시 작품 사진이 크게 깔리는 배경 -->
       <div class="gallery-bg" id="galleryBg" aria-hidden="true"></div>
       <div class="section-label reveal">WORK</div>
+      <!-- 두 가지 표시 방식이 함께 들어 있습니다.
+           script.js 맨 위의 GALLERY_MODE 로 어느 쪽을 쓸지 정하고,
+           쓰지 않는 쪽은 자동으로 숨겨집니다. -->
+
+      <!-- ① 사진 그리드 — 모든 작업 사진을 무작위 순서로 (현재 방식) -->
+      <div class="photogrid reveal" id="photoGrid">
+        <!-- 사진 타일은 script.js의 WORKS 데이터로 생성됨 -->
+      </div>
+
+      <!-- ② 3D 구 궤도 — 예전 방식 (GALLERY_MODE = "orbit") -->
       <div class="orbit reveal" id="orbit">
         <!-- 작품 카드는 script.js의 WORKS 데이터로 생성됨 -->
         <p class="orbit-hint">DRAG TO ROTATE · CLICK TO VIEW</p>
@@ -248,7 +258,7 @@
     <a href="#top" data-hover>Top ↑</a>
   </footer>
 
-  <script src="script.js?v=64"></script>
+  <script src="script.js?v=74"></script>
   <script>
     // 메타버스 임베드: 클릭 전엔 미리보기(비상호작용), 클릭하면 조작 활성화
     (function () {

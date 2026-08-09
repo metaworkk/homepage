@@ -1,11 +1,17 @@
 ﻿/* ============================================================
    PORTFOLIO SCRIPT — 반전 커서 / 3D 틸트 / 패럴랙스 / 리빌
    ============================================================ */
-(() => {
+(async () => {
   "use strict";
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+
+  /* ── WORK 갤러리 표시 방식 ────────────────────────────────
+     "grid"  = 모든 작업 사진을 무작위 순서로, 같은 높이·같은 간격으로 흩어 놓는다
+     "orbit" = 예전 방식. 3D 구 위에서 카드가 두 줄로 회전한다
+     이 한 줄만 바꾸면 서로 오갈 수 있습니다. 두 방식의 코드는 모두 살아 있습니다. */
+  const GALLERY_MODE = "grid";
 
   /* 사진 캐시 무력화 —
      사진을 같은 파일명으로 교체하면 브라우저가 예전 것을 계속 보여준다.
@@ -196,8 +202,10 @@
     { folder: "work08", title: "My room - 방구석대모험", meta: "Metaverse project in VRchat · 2021", count: 0,
       video: "video/room-web.mp4",         videoHQ: "https://video.metawork.org/room.mp4", poster: "video/room-poster.jpg",
       desc: "arte 한국문화예술교육진흥원 비대면 VR 교육프로그램 <br> Performed at VRchat" },
+    /* 영상을 바꿀 때는 파일명도 바꾼다 — 이름이 같으면 브라우저가 예전 것을 계속 보여준다.
+       (사진과 달리 영상에는 ?v= 캐시 무력화를 걸지 않는다. 용량이 커서) */
     { folder: "work09", title: "작은만족", meta: "Mixed media with 2 channel video · 2015", count: 0,
-      video: "video/little-web.mp4",       videoHQ: "https://video.metawork.org/little.mp4", poster: "video/little-poster.jpg",
+      video: "video/little2-web.mp4",      videoHQ: "https://video.metawork.org/little2.mp4", poster: "video/little2-poster.jpg",
       desc: "" },
     { folder: "work10", title: "오프닝 시퀀스", meta: "Mixed media with Single channel video · 2014", count: 0,
       video: "video/kuku-web.mp4",  videoHQ: "https://video.metawork.org/kuku.mp4", poster: "video/kuku-poster.jpg",
@@ -217,12 +225,28 @@
 
   ];
 
-  // count/folder → 실제 경로 배열 (img/work01/image01.jpg …)
+  /* 사진 목록 — img/manifest.json 이 있으면 그걸 따른다.
+     이 파일은 make-manifest.ps1 이 img/ 폴더를 훑어 만들고,
+     배포할 때 자동으로 갱신된다. 그래서 사진을 폴더에 넣기만 하면 화면에 나오고,
+     아래 count 를 손으로 고치지 않아도 된다.
+     목록 파일이 없으면(예: 갓 클론한 저장소) 예전처럼 count 를 쓴다. */
+  let MANIFEST = null;
+  try {
+    const res = await fetch(bust("img/manifest.json"), { cache: "no-cache" });
+    if (res.ok) MANIFEST = await res.json();
+  } catch (e) {
+    /* 목록 파일이 없거나 읽지 못하면 count 방식으로 넘어간다 */
+  }
+
+  // 폴더 → 실제 경로 배열 (img/photo01/image01.jpg …)
   WORKS.forEach((w) => {
     const ext = w.ext || "jpg";
-    w.images = Array.from({ length: w.count || 0 }, (_, i) =>
-      "img/" + w.folder + "/image" + String(i + 1).padStart(2, "0") + "." + ext
-    );
+    const listed = MANIFEST && MANIFEST[w.folder];
+    w.images = listed
+      ? listed.map((f) => "img/" + w.folder + "/" + f)
+      : Array.from({ length: w.count || 0 }, (_, i) =>
+          "img/" + w.folder + "/image" + String(i + 1).padStart(2, "0") + "." + ext
+        );
     // 라이트박스에서 넘겨볼 슬라이드 — 영상이 있으면 맨 앞
     // videos 배열이 있으면 여러 편, 없으면 기존 video/videoHQ 를 1편으로 취급
     const vids = w.videos || (w.video ? [{ web: w.video, hq: w.videoHQ }] : []);
@@ -320,9 +344,16 @@
 
   const orbit = document.getElementById("orbit");
 
+  const photoGrid = document.getElementById("photoGrid");
+  const useOrbit = GALLERY_MODE === "orbit";
+
+  // 쓰지 않는 쪽은 화면에서 완전히 뺀다 (자리만 차지하지 않도록)
+  if (orbit) orbit.hidden = !useOrbit;
+  if (photoGrid) photoGrid.hidden = useOrbit;
+
   if (orbit) {
     // 카드 생성 — 영상이 있으면 무음 루프, 없으면 사진, 둘 다 없으면 플레이스홀더
-    const cards = WORKS.map((w, i) => {
+    const cards = !useOrbit ? [] : WORKS.map((w, i) => {
       const fig = document.createElement("figure");
       fig.className = "orbit-card";
       fig.dataset.index = i;
@@ -356,11 +387,37 @@
     // 앞쪽으로 돌아온 카드만 재생 — 뒤로 가면 정지(성능/데이터 절약)
     const cardVideos = cards.map((c) => c.querySelector("video"));
 
+    /* 마우스오버 배경 — 작품에 올리면 그 사진이 뒤에 크게 깔린다.
+       (팝업 열기 전 미리보기. 데스크톱 전용) 두 방식이 함께 쓴다. */
+    const hoverBg = document.getElementById("galleryBg");
+    let bgTimer = null;
+
+    function showBg(i) {
+      if (!hoverBg) return;
+      const src = WORKS[i].images[0] || WORKS[i].poster;
+      if (!src) return;
+      clearTimeout(bgTimer);
+      hoverBg.style.backgroundImage = 'url("' + bust(src) + '")';
+      hoverBg.classList.add("show");
+    }
+    function hideBg() {
+      if (!hoverBg) return;
+      clearTimeout(bgTimer);
+      // 사이를 지나갈 때 깜빡이지 않도록 살짝 지연
+      bgTimer = setTimeout(() => hoverBg.classList.remove("show"), 90);
+    }
+
+    // 드래그 끝의 클릭을 무시하기 위한 이동량 (구 방식에서만 늘어난다)
+    let movedPx = 0;
+
+    /* ── 여기부터 구(orbit) 방식 전용 ───────────────────────── */
+    if (useOrbit) {
+
     let rot = 0;
     let R = 0;
     let dragging = false;
     let hovering = false;
-    let startX = 0, startRot = 0, movedPx = 0;
+    let startX = 0, startRot = 0;
 
     /* 2줄 궤도 — 윗줄(사진)과 아랫줄(영상)이 서로 반대로 돈다.
        각 작품의 row 값으로 줄을 나눈다 (0 = 윗줄, 그 외/생략 = 아랫줄) */
@@ -437,26 +494,6 @@
       orbit.classList.remove("dragging");
     });
 
-    /* 마우스오버 배경 — 카드에 올리면 그 작품 사진이 뒤에 크게 깔린다.
-       (팝업 열기 전 미리보기. 데스크톱 전용) */
-    const hoverBg = document.getElementById("galleryBg");
-    let bgTimer = null;
-
-    function showBg(i) {
-      if (!hoverBg) return;
-      const src = WORKS[i].images[0];
-      if (!src) return;
-      clearTimeout(bgTimer);
-      hoverBg.style.backgroundImage = 'url("' + bust(src) + '")';
-      hoverBg.classList.add("show");
-    }
-    function hideBg() {
-      if (!hoverBg) return;
-      clearTimeout(bgTimer);
-      // 카드 사이를 지나갈 때 깜빡이지 않도록 살짝 지연
-      bgTimer = setTimeout(() => hoverBg.classList.remove("show"), 90);
-    }
-
     // 데스크톱에서 카드에 올리면 자동 회전 일시정지 + 배경 사진
     if (!isTouch) {
       cards.forEach((c, i) => {
@@ -468,6 +505,115 @@
     orbitLayout();
     window.addEventListener("resize", orbitLayout);
     requestAnimationFrame(orbitFrame);
+
+    }
+    /* ── 구(orbit) 방식 전용 끝 ─────────────────────────────── */
+
+    /* ── 사진 그리드 방식 ────────────────────────────────────
+       모든 작품의 모든 사진을 한 판에 무작위 순서로 늘어놓는다.
+       높이는 전부 같게 맞추고 가로폭만 사진의 원래 비율을 따르며,
+       사이 간격은 일정하다. 누르면 해당 작품 페이지로 넘어간다. */
+    if (!useOrbit && photoGrid) {
+      const items = [];
+      WORKS.forEach((w, i) => {
+        if (w.images.length) w.images.forEach((src) => items.push({ i, src }));
+        else if (w.poster) items.push({ i, src: w.poster });  // 영상 작업은 포스터 한 장으로
+      });
+
+      // 무작위 순서 (Fisher–Yates) — 새로고침할 때마다 배치가 달라진다
+      for (let k = items.length - 1; k > 0; k--) {
+        const j = Math.floor(Math.random() * (k + 1));
+        const t = items[k]; items[k] = items[j]; items[j] = t;
+      }
+
+      /* 사진 비율은 파일이 로드돼야 알 수 있다.
+         그전까지는 가로 사진으로 가정하고, 한 장씩 들어올 때마다
+         실제 비율로 고쳐 다시 배치한다. */
+      const ratios = items.map(() => 1.4);
+
+      items.forEach((it, k) => {
+        const w = WORKS[it.i];
+        const fig = document.createElement("figure");
+        fig.className = "pg-item";
+        fig.dataset.index = it.i;
+        fig.innerHTML =
+          '<img src="' + bust(it.src) + '" alt="' + w.title + '" decoding="async">' +
+          '<figcaption>' + w.title + "</figcaption>";
+        const img = fig.querySelector("img");
+        img.addEventListener("load", () => {
+          if (!img.naturalHeight) return;
+          ratios[k] = img.naturalWidth / img.naturalHeight;
+          fig.style.setProperty("--r", ratios[k].toFixed(4));
+          scheduleFit();
+        });
+        photoGrid.appendChild(fig);
+        cards.push(fig);
+      });
+
+      // 이 타일 높이로 줄바꿈하면 전체가 몇 픽셀이 되는지 (실제 배치와 같은 규칙)
+      function packedHeight(h, availW, gap) {
+        let rows = 1, x = 0;
+        for (const r of ratios) {
+          const w = Math.min(availW, Math.max(24, r * h));
+          if (x === 0) x = w;
+          else if (x + gap + w <= availW) x += gap + w;
+          else { rows++; x = w; }
+        }
+        return rows * h + (rows - 1) * gap;
+      }
+
+      /* 사진이 너무 작아지면 인덱스가 아니라 먼지처럼 보인다.
+         이 크기보다 작아져야 한 화면에 들어가는 상황이면,
+         억지로 줄이는 대신 갤러리를 스크롤되게 둔다. */
+      const MIN_TILE = 130;
+      const sec = photoGrid.closest(".section-gallery");
+
+      /* 한 화면 안에 전부 들어오는 가장 큰 타일 높이를 이분 탐색으로 찾는다.
+         사진 수가 늘거나 창 크기가 바뀌어도 알아서 맞춰진다. */
+      function fitGrid() {
+        // 재는 동안에는 항상 '한 화면' 상태로 되돌린다.
+        // (늘어난 상태에서 재면 결과가 그 높이에 영향을 받아 요동친다)
+        if (sec) sec.classList.remove("pg-scroll");
+
+        const availW = photoGrid.clientWidth;
+        const availH = photoGrid.clientHeight;
+        if (!availW || !availH || !ratios.length) return;
+        const gap = parseFloat(getComputedStyle(photoGrid).columnGap) || 10;
+
+        let lo = 36, hi = 280, best = 36;
+        for (let s = 0; s < 24; s++) {
+          const h = (lo + hi) / 2;
+          if (packedHeight(h, availW, gap) <= availH) { best = h; lo = h; }
+          else hi = h;
+        }
+
+        if (best >= MIN_TILE) {
+          photoGrid.style.setProperty("--pg-h", Math.floor(best) + "px");
+        } else {
+          photoGrid.style.removeProperty("--pg-h");   // CSS 기본 크기로
+          if (sec) sec.classList.add("pg-scroll");
+        }
+      }
+
+      let fitPending = false;
+      function scheduleFit() {
+        if (fitPending) return;
+        fitPending = true;
+        requestAnimationFrame(() => { fitPending = false; fitGrid(); });
+      }
+
+      fitGrid();
+      window.addEventListener("resize", scheduleFit);
+
+      // 데스크톱에서 사진에 올리면 그 작품이 뒤에 크게 깔린다
+      if (!isTouch) {
+        cards.forEach((c) => {
+          const i = Number(c.dataset.index);
+          c.addEventListener("mouseenter", () => showBg(i));
+          c.addEventListener("mouseleave", hideBg);
+        });
+      }
+    }
 
     /* --------------------------------------------------------
        라이트박스
@@ -524,10 +670,13 @@
       lbRender();
     }
 
-    // 구는 인덱스 역할 — 카드를 누르면 해당 작품 페이지로 이동
-    cards.forEach((c, i) => {
+    /* 갤러리는 인덱스 역할 — 누르면 해당 작품 페이지로 이동.
+       그리드에서는 한 작품에 사진이 여러 장이므로 순번이 아니라
+       타일에 적어 둔 작품 번호(dataset.index)를 따라간다. */
+    cards.forEach((c) => {
       c.addEventListener("click", () => {
         if (movedPx > 8) return; // 드래그였다면 클릭 무시
+        const i = Number(c.dataset.index);
         const page = document.getElementById("work" + String(i + 1).padStart(2, "0"));
         if (page) page.scrollIntoView({ behavior: "smooth", block: "start" });
         else lbOpen(i);

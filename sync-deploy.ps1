@@ -39,10 +39,13 @@ function Get-Fingerprint {
         $parts += Get-Md5 $t
     }
     # 미디어는 내용 대신 이름·크기·수정시각으로 (용량이 커서 해시는 비쌈)
+    # manifest.json 은 이 스크립트가 만들어내는 결과물이라 제외한다.
+    # (넣어두면 갱신 → 지문 변화 → 또 배포 가 끝없이 반복된다)
     foreach ($dir in @("video", "img", "fonts", "meta")) {
         $p = Join-Path $Root $dir
         if (Test-Path $p) {
             $list = Get-ChildItem $p -Recurse -File |
+                    Where-Object { $_.Name -ne "manifest.json" } |
                     Sort-Object FullName |
                     ForEach-Object { "$($_.FullName)|$($_.Length)|$($_.LastWriteTimeUtc.Ticks)" }
             $parts += Get-Md5 ($list -join "`n")
@@ -53,6 +56,16 @@ function Get-Fingerprint {
 
 Set-Location $Root
 Say "--- 동기화 시작 ---"
+
+# ── 0) 사진 목록 갱신 ──
+# img/ 폴더를 훑어 img/manifest.json 을 다시 만든다.
+# 사진을 폴더에 넣기만 하면 화면에 나오게 하는 장치. (내용이 같으면 건드리지 않음)
+try {
+    $mf = & powershell -ExecutionPolicy Bypass -File (Join-Path $Root "make-manifest.ps1")
+    $mf | ForEach-Object { Say "  $_" }
+} catch {
+    Say "알림: 사진 목록을 만들지 못했습니다 — count 방식으로 표시됩니다. $($_.Exception.Message)"
+}
 
 # ── 1) GitHub 에 새 커밋이 있으면 받아온다 ──
 git fetch origin main --quiet

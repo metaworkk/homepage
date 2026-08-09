@@ -28,3 +28,8 @@ sync-deploy.log
 
 # 에셋 해시 (캐시 버전 자동 갱신용)
 .assets-hash
+
+# 사진 목록 — make-manifest.ps1 이 img/ 를 훑어 만드는 결과물.
+# 저장소에 넣으면 배포 때마다 작업 트리가 더러워지고,
+# 그러면 sync-deploy.ps1 이 다른 PC 의 변경을 받아오지 않는다.
+img/manifest.json

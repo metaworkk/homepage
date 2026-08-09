@@ -529,8 +529,23 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 /* ------------------------------------------------------------
    GALLERY — 3D 구 캐러셀 (지구본 궤도)
    ------------------------------------------------------------ */
-/* 다른 섹션과 같은 1200px — 달랐을 때 제목 왼쪽 기준선이 22px 어긋났음 */
-.section-gallery { max-width: 1200px; position: relative; }
+/* 갤러리는 인덱스라서 다른 섹션(고정 1200px)과 달리 화면폭에 비례한다.
+   히어로의 메타버스 창과 같은 규칙 — 좌우를 12%씩 비운다(.hero-embed).
+   넓은 화면일수록 한 줄에 더 들어가 줄 수가 줄어든다.
+   제목선(.section-label)도 이 폭을 함께 쓰므로 사진과 좌우 끝이 맞는다. */
+.section-gallery {
+  max-width: none;
+  position: relative;
+  padding-left: 12%;
+  padding-right: 12%;
+}
+/* 좁은 화면에서는 12% 가 오히려 여백을 낭비한다 — 다른 섹션과 같은 여백으로 */
+@media (max-width: 720px) {
+  .section-gallery {
+    padding-left: clamp(1.4rem, 5vw, 3rem);
+    padding-right: clamp(1.4rem, 5vw, 3rem);
+  }
+}
 
 /* 스냅 화면일 때 — 한 뷰포트 안에 정확히 들어오도록 여백·구 크기 조정 */
 .section-gallery.snap {
@@ -541,6 +556,86 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   padding-bottom: clamp(2rem, 5svh, 4rem);
 }
 .section-gallery.snap .orbit { height: min(58svh, 560px); }
+.section-gallery.snap .photogrid { height: min(62svh, 620px); }
+
+/* ------------------------------------------------------------
+   WORK — 사진 그리드 (현재 방식)
+   모든 작업 사진을 무작위 순서로. 높이는 전부 같고 가로폭만
+   사진의 원래 비율을 따른다. 타일 높이(--pg-h)는 script.js 가
+   "한 화면에 전부 들어오는 가장 큰 값"으로 계산해 넣는다.
+   ------------------------------------------------------------ */
+.photogrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: clamp(6px, 0.9vw, 12px);
+  /* 한 화면에 다 들어오면 script.js 가 더 큰 값으로 덮어쓴다.
+     다 안 들어올 때는 이 크기로 두고 갤러리를 스크롤한다. */
+  --pg-h: clamp(120px, 17svh, 180px);
+}
+.photogrid[hidden] { display: none; }
+
+/* 사진이 많아 한 화면에 담기지 않을 때 — 갤러리만 스냅을 풀어 자유롭게 스크롤.
+   (스냅을 켜 두면 아래쪽 사진에서 멈출 수 없어 볼 수가 없다) */
+.section-gallery.pg-scroll {
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+  justify-content: flex-start;
+}
+.section-gallery.pg-scroll .photogrid {
+  height: auto;
+  align-content: flex-start;
+}
+
+.pg-item {
+  position: relative;
+  height: var(--pg-h);
+  aspect-ratio: var(--r, 1.4);   /* 사진이 로드되면 실제 비율로 바뀐다 */
+  max-width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  background: #181818;
+  opacity: 0.82;
+  transition: opacity 0.4s, outline-color 0.3s;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+.pg-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.pg-item:hover { opacity: 1; outline-color: var(--key); }
+
+/* 제목은 평소엔 감추고 마우스를 올렸을 때만 (구 방식의 .card-hover 와 같은 규칙) */
+.pg-item figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.5rem 0.55rem 0.45rem;
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: var(--tight);
+  color: var(--ink);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0));
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.pg-item:hover figcaption { opacity: 1; }
+
+/* 손가락 입력에서는 호버가 없으니 제목을 항상 보여준다 */
+@media (hover: none), (pointer: coarse) {
+  .pg-item { opacity: 1; }
+  .pg-item figcaption { display: none; }
+}
+
+/* 좁은 화면 — 데스크톱 크기 그대로 두면 한 줄에 두 장씩 들어가
+   갤러리가 여섯 화면 높이까지 늘어난다. 화면폭에 맞춰 줄인다. */
+@media (max-width: 720px) {
+  .photogrid { --pg-h: clamp(78px, 24vw, 140px); }
+}
 
 /* 마우스오버 배경 — 작품 사진을 화면 가득 크게 (팝업 전 미리보기) */
 .gallery-bg {
