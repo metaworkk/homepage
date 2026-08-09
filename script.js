@@ -237,7 +237,7 @@
     { folder: "little2", title: "작은만족", meta: "Mixed media with 2 channel video · 2015", count: 0,
       video: "video/little2-web.mp4",      videoHQ: "https://video.metawork.org/little2.mp4", poster: "video/little2-poster.jpg",
       desc: "" },
-    { folder: "stock-march", title: "Stock march", meta: "Mixed media with 2 channel video · 2011", count: 0,
+    { folder: "stock-march", title: "Stock march", meta: "Mixed media with 2 channel video · 2011", count: 1,
       video: "video/stock-march-web.mp4", videoHQ: "https://video.metawork.org/stock-march.mp4", poster: "video/stock-march-poster.jpg",
       desc: "Stock March는 연평도 사건 당시, 사회적 긴장과는 반대로 상승하던 국방 관련 주식의 움직임에서 시작되었다. 코스피 지수, 국방 관련 종목, 그리고 직접 보유하고 있던 주식의 가격 변화를 데이터로 받아 사운드로 변환했다. 수치의 변화는 일정한 규칙과 확률적 변형을 거치며 예측하기 어려운 음의 흐름을 만들어낸다. 생성된 사운드는 다시 악보의 형태로 옮겨진다. 시장의 움직임은 숫자에서 소리로, 다시 기호로 번역된다." },
     { folder: "kuku", title: "오프닝 시퀀스", meta: "Mixed media with Single channel video · 2014", count: 0,
