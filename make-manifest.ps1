@@ -1,28 +1,49 @@
 ﻿# =====================================================================
-#  img/ 폴더를 훑어 img/manifest.json 을 만든다.
+#  img/manifest.json 을 만든다. (실제 작업은 make-manifest.py 가 한다)
 #
-#  이 파일이 있으면 script.js 는 count 숫자 대신 이 목록을 따른다.
-#  즉 사진을 폴더에 넣기만 하면 화면에 나온다 —
-#  count 를 손으로 세어 고칠 필요도, 파일 이름을 image01 로 맞출 필요도 없다.
+#  Python 으로 만들면 사진 목록과 함께 톤 값(명도·색상·채도)까지 잰다.
+#  그 값으로 WORK 그리드가 어두운 것부터 밝은 것 순으로 배열된다.
 #
-#  배포할 때 sync-deploy.ps1 이 자동으로 부른다.
+#  Python 이나 Pillow 가 없는 PC 를 대비해, 실패하면 목록만이라도 만든다.
+#  (톤 값이 없으면 그리드는 예전처럼 무작위 순서로 나온다 — 화면은 정상)
+#
 #  직접 실행:  powershell -ExecutionPolicy Bypass -File make-manifest.ps1
 # =====================================================================
 $ErrorActionPreference = "Stop"
 try { [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch {}
 
-$Root   = "C:\Users\meta\Downloads\portfolio"
+$Root   = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ImgDir = Join-Path $Root "img"
 $Out    = Join-Path $ImgDir "manifest.json"
+$Py     = Join-Path $Root "make-manifest.py"
 
 if (-not (Test-Path $ImgDir)) { Write-Output "img 폴더가 없습니다."; exit 0 }
 
-# image2 가 image10 보다 뒤로 가지 않도록 숫자를 자리수 맞춰 비교한다
-$natural = {
-    [regex]::Replace($_.Name, '\d+', { param($m) $m.Value.PadLeft(10, '0') })
+# ── 1) Python 으로 (목록 + 톤) ──
+if (Test-Path $Py) {
+    foreach ($exe in @("python", "py")) {
+        try {
+            # stderr 를 합치지 않는다. PowerShell 5.1 은 네이티브 명령의 stderr 를
+            # 오류로 감싸서, 경고 한 줄만 나와도 실패로 처리해 버린다.
+            $out = & $exe $Py
+            if ($LASTEXITCODE -eq 0) {
+                $out | ForEach-Object { Write-Output $_ }
+                exit 0
+            }
+        } catch {
+            # 다음 실행기로
+        }
+    }
+    Write-Output "알림: Python 실행 실패 — 톤 값 없이 목록만 만듭니다."
 }
 
-$map = [ordered]@{}
+# ── 2) 대비책: 목록만 (톤 없음) ──
+# image2 가 image10 보다 뒤로 가지 않도록 숫자를 자리수 맞춰 비교한다
+$natural = {
+    [regex]::Replace($_.Name, '\d+', { param($m) $m.Value.PadLeft(12, '0') })
+}
+
+$folders = [ordered]@{}
 $total = 0
 
 Get-ChildItem $ImgDir -Directory | Sort-Object Name | ForEach-Object {
@@ -30,17 +51,13 @@ Get-ChildItem $ImgDir -Directory | Sort-Object Name | ForEach-Object {
              Where-Object { $_.Extension -match '^\.(jpg|jpeg|png|webp|gif|avif)$' } |
              Sort-Object $natural |
              ForEach-Object { $_.Name }
-
-    # 사진이 없는 폴더는 넣지 않는다 (script.js 가 예전 방식으로 넘어가지 않도록
-    # 빈 배열이라도 넣어야 "이 작품은 사진 0장"이 정확히 전달된다)
-    $map[$_.Name] = @($files)
+    $folders[$_.Name] = @($files)
     $total += $files.Count
 }
 
-$json = $map | ConvertTo-Json -Depth 3
+$json = [ordered]@{ v = 2; folders = $folders; tone = @{} } |
+        ConvertTo-Json -Depth 4
 
-# 내용이 같으면 덮어쓰지 않는다.
-# (수정시각이 바뀌면 배포 스크립트가 "내용이 바뀌었다"고 오해해 매번 배포한다)
 $same = $false
 if (Test-Path $Out) {
     $old = Get-Content $Out -Raw -Encoding UTF8
@@ -48,9 +65,9 @@ if (Test-Path $Out) {
 }
 
 if ($same) {
-    Write-Output ("사진 목록 그대로 — 폴더 {0}개, 사진 {1}장" -f $map.Count, $total)
+    Write-Output ("사진 목록 그대로 — 폴더 {0}개, 사진 {1}장 (톤 없음)" -f $folders.Count, $total)
 } else {
     # BOM 없는 UTF-8 로 저장 (브라우저 JSON.parse 가 BOM 을 싫어함)
     [IO.File]::WriteAllText($Out, $json, (New-Object Text.UTF8Encoding $false))
-    Write-Output ("사진 목록 갱신 — 폴더 {0}개, 사진 {1}장" -f $map.Count, $total)
+    Write-Output ("사진 목록 갱신 — 폴더 {0}개, 사진 {1}장 (톤 없음)" -f $folders.Count, $total)
 }

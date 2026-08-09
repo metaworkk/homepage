@@ -246,10 +246,99 @@
     /* 목록 파일이 없거나 읽지 못하면 count 방식으로 넘어간다 */
   }
 
+  /* 목록 파일은 두 가지 모양이 있다.
+     v2 = { v:2, folders:{...}, tone:{...} }   — 톤 값 포함 (지금)
+     예전 = { photo01: [...], ... }             — 목록만 */
+  const MF_FOLDERS = (MANIFEST && MANIFEST.folders) || MANIFEST || null;
+  const MF_TONE = (MANIFEST && MANIFEST.tone) || null;
+
+  /* ── WORK 그리드 배열 순서 ────────────────────────────────
+     "tone"   = 어두운 것부터 밝은 것으로. 멀리서 보면 검정→흰색 그라데이션이
+                되고, 그 안에서 색이 천천히 돈다. (톤 값은 목록 파일에 들어 있다)
+     "random" = 새로고침할 때마다 뒤섞인다 (예전 방식)
+     톤 값이 없으면 자동으로 random 으로 넘어간다. */
+  const GALLERY_ORDER = "tone";
+
+  /* 명도를 몇 단으로 나눌지. 이 숫자 하나가 "얼마나 의도적으로 보일지"를 정한다.
+     크게 → 매끈한 그라데이션(색상표에 가까움) / 작게 → 느슨하고 자연스러움 */
+  const TONE_BANDS = 6;
+
+  function shuffle(a) {
+    for (let k = a.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      const t = a[k]; a[k] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* 톤 순서로 다시 늘어놓는다 (items 를 제자리에서 바꾼다).
+
+     명도로 먼저 밴드를 나누고, 밴드 안에서 색상으로 정렬한다.
+     명도와 색상을 하나의 점수로 합치지 않는 이유: 색상은 0도와 359도가 같은
+     빨강인 '원형' 값이라, 선형으로 더하면 비슷한 빨강 둘이 정반대 끝으로 간다.
+     밴드 안에서만 쓰면 그 문제가 사라진다.
+
+     색이 흐릿한 사진(설치 기록·도면·흰 제품컷)은 평균 색상이 잡음이므로
+     색상 정렬에서 빼고 밴드 안에서 명도로만 둔다. */
+  function toneOrder(items) {
+    const tone = (it) => MF_TONE[it.src] || null;
+    const withTone = items.filter(tone);
+    const without = items.filter((it) => !tone(it));
+    if (withTone.length < 2) return;
+
+    let lo = Infinity, hi = -Infinity;
+    for (const it of withTone) {
+      const L = tone(it)[0];
+      if (L < lo) lo = L;
+      if (L > hi) hi = L;
+    }
+    const span = hi - lo || 1;
+
+    const bands = Array.from({ length: TONE_BANDS }, () => []);
+    for (const it of withTone) {
+      const t = (tone(it)[0] - lo) / span;
+      bands[Math.min(TONE_BANDS - 1, Math.floor(t * TONE_BANDS))].push(it);
+    }
+
+    const out = [];
+    for (const band of bands) {
+      band.sort((a, b) => {
+        const ta = tone(a), tb = tone(b);
+        // 색이라 할 만한 게 없는 것은 뒤로 빼고 명도로만
+        const na = ta[3] < 0.35, nb = tb[3] < 0.35;
+        if (na !== nb) return na ? 1 : -1;
+        if (na) return ta[0] - tb[0];
+        // 파랑 근처에서 시작해 한 바퀴 — 어두운 쪽이 대체로 푸른 계열이라
+        return ((ta[1] - 200 + 360) % 360) - ((tb[1] - 200 + 360) % 360);
+      });
+      spreadSameWork(band);
+      out.push(...band);
+    }
+
+    // 톤을 모르는 것(목록에 없는 사진)은 맨 뒤에
+    items.length = 0;
+    items.push(...out, ...without);
+  }
+
+  /* 같은 작품 사진이 나란히 붙는 것만 떼어놓는다.
+     어두운 쪽에 한 작업의 기록사진이 몰려 있어 첫 줄이 그 작업만으로 채워지는 걸 막는다.
+     순서를 크게 흔들지 않도록, 뒤쪽에서 가장 가까운 다른 작품과만 자리를 바꾼다. */
+  function spreadSameWork(list) {
+    for (let k = 1; k < list.length; k++) {
+      if (list[k].i !== list[k - 1].i) continue;
+      for (let j = k + 1; j < list.length; j++) {
+        if (list[j].i !== list[k - 1].i) {
+          const t = list[k]; list[k] = list[j]; list[j] = t;
+          break;
+        }
+      }
+    }
+  }
+
   // 폴더 → 실제 경로 배열 (img/photo01/image01.jpg …)
   WORKS.forEach((w) => {
     const ext = w.ext || "jpg";
-    const listed = MANIFEST && MANIFEST[w.folder];
+    const listed = MF_FOLDERS && MF_FOLDERS[w.folder];
     w.images = listed
       ? listed.map((f) => "img/" + w.folder + "/" + f)
       : Array.from({ length: w.count || 0 }, (_, i) =>
@@ -528,22 +617,23 @@
         else if (w.poster) items.push({ i, src: w.poster });  // 영상 작업은 포스터 한 장으로
       });
 
-      // 무작위 순서 (Fisher–Yates) — 새로고침할 때마다 배치가 달라진다
-      for (let k = items.length - 1; k > 0; k--) {
-        const j = Math.floor(Math.random() * (k + 1));
-        const t = items[k]; items[k] = items[j]; items[j] = t;
-      }
+      shuffle(items);
+      if (GALLERY_ORDER === "tone" && MF_TONE) toneOrder(items);
 
       /* 사진 비율은 파일이 로드돼야 알 수 있다.
-         그전까지는 가로 사진으로 가정하고, 한 장씩 들어올 때마다
-         실제 비율로 고쳐 다시 배치한다. */
-      const ratios = items.map(() => 1.4);
+         목록 파일에 비율이 적혀 있으면 그걸 먼저 쓰고(레이아웃이 안 흔들린다),
+         없으면 가로 사진으로 가정했다가 로드될 때 실제 값으로 고친다. */
+      const ratios = items.map((it) => {
+        const t = MF_TONE && MF_TONE[it.src];
+        return t && t[4] ? t[4] : 1.4;
+      });
 
       items.forEach((it, k) => {
         const w = WORKS[it.i];
         const fig = document.createElement("figure");
         fig.className = "pg-item";
         fig.dataset.index = it.i;
+        fig.style.setProperty("--r", ratios[k].toFixed(4));
         fig.innerHTML =
           '<img src="' + bust(it.src) + '" alt="' + w.title + '" decoding="async">' +
           '<figcaption>' + w.title + "</figcaption>";

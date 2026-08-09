@@ -33,3 +33,6 @@ sync-deploy.log
 # 저장소에 넣으면 배포 때마다 작업 트리가 더러워지고,
 # 그러면 sync-deploy.ps1 이 다른 PC 의 변경을 받아오지 않는다.
 img/manifest.json
+
+# 톤 값 캐시 — 사진이 안 바뀌면 다시 재지 않으려고 (생성물)
+.tone-cache.json
