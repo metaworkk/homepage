@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Gothic+A1:wght@400;500;700;800;900&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=83">
+  <link rel="stylesheet" href="style.css?v=84">
 </head>
 <body>
 
@@ -93,7 +93,10 @@
     <!-- 셀: 메타버스 (중앙) — BTC 온톨로지 월드 임베드 -->
     <div class="hero-embed" aria-label="BTC 메타버스">
       <div class="embed-frame">
-        <iframe id="metaFrame" src="meta/index.html?solo=1" title="BTC Metaverse — 실시간 3D 월드" loading="lazy" allow="fullscreen"></iframe>
+        <!-- ?v= 를 붙여야 한다. 이게 없으면 브라우저가 예전 meta/index.html 을 계속 쓰고,
+             그 안에 적힌 옛 번들 파일명은 새로 배포하면서 사라져 메타버스가 빈 화면이 된다.
+             (배포 스크립트가 style.css·script.js 와 함께 이 숫자도 올린다) -->
+        <iframe id="metaFrame" src="meta/index.html?solo=1&amp;v=84" title="BTC Metaverse — 실시간 3D 월드" loading="lazy" allow="fullscreen"></iframe>
         <button class="embed-play" id="embedPlay" type="button" aria-label="메타버스 탐험 시작">
           <span>▶</span> 탐험하기
         </button>
@@ -261,7 +264,7 @@
     <a href="#top" data-hover>Top ↑</a>
   </footer>
 
-  <script src="script.js?v=83"></script>
+  <script src="script.js?v=84"></script>
   <script>
     // 메타버스 임베드: 클릭 전엔 미리보기(비상호작용), 클릭하면 조작 활성화
     (function () {

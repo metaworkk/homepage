@@ -101,6 +101,9 @@ $cur  = [regex]::Match($raw, 'style\.css\?v=(\d+)').Groups[1].Value
 $next = [int]$cur + 1
 $raw  = $raw -replace 'style\.css\?v=\d+',  "style.css?v=$next"
 $raw  = $raw -replace 'script\.js\?v=\d+', "script.js?v=$next"
+# 메타버스 임베드도 같이. 이게 없으면 브라우저가 예전 meta/index.html 을 계속 쓰는데,
+# 거기 적힌 옛 번들 파일명은 새로 배포하면서 사라져 빈 화면이 된다.
+$raw  = $raw -replace 'meta/index\.html\?solo=1&amp;v=\d+', "meta/index.html?solo=1&amp;v=$next"
 Set-Content $html -Value $raw -Encoding UTF8 -NoNewline
 Say "캐시 버전: v$cur -> v$next"
 
