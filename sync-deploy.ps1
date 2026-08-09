@@ -96,7 +96,8 @@ if ($now -eq $prev -and -not $Force) {
 
 # ── 3) 캐시 버전 자동 갱신 (css/js 가 바뀐 경우만) ──
 $html = Join-Path $Root "index.html"
-$raw  = Get-Content $html -Raw -Encoding UTF8
+$rawOriginal = Get-Content $html -Raw -Encoding UTF8
+$raw  = $rawOriginal
 $cur  = [regex]::Match($raw, 'style\.css\?v=(\d+)').Groups[1].Value
 $next = [int]$cur + 1
 $raw  = $raw -replace 'style\.css\?v=\d+',  "style.css?v=$next"
@@ -122,6 +123,17 @@ if ($big) {
 Say "배포 시작..."
 $out = & npx --yes wrangler@latest pages deploy . --project-name=metawork --branch=portfolio --commit-dirty=true 2>&1
 $out | Where-Object { $_ -notmatch '^npm notice' } | ForEach-Object { Say "  $_" }
+
+# 캐시 숫자는 배포 산출물에만 필요하다. 로컬에 남겨두면 작업 트리가 dirty가 되어
+# 다음 원격 커밋을 자동으로 pull하지 못하므로, 배포 직전 상태로 되돌린다.
+# 배포 도중 사용자가 index.html을 수정했다면 그 변경을 덮지 않는다.
+$rawCurrent = Get-Content $html -Raw -Encoding UTF8
+if ($rawCurrent -eq $raw) {
+    Set-Content $html -Value $rawOriginal -Encoding UTF8 -NoNewline
+    Say "로컬 캐시 버전 변경 복원"
+} else {
+    Say "알림: 배포 중 index.html이 바뀌어 캐시 버전 복원을 건너뜁니다."
+}
 
 if ($out -match "Deployment complete") {
     # 배포에 성공한 내용의 지문을 기록 (버전 갱신 후 다시 계산)

@@ -21,13 +21,16 @@ if (-not (Test-Path $ImgDir)) { Write-Output "img 폴더가 없습니다."; exit
 
 # ── 1) Python 으로 (목록 + 톤) ──
 if (Test-Path $Py) {
+    # Windows PowerShell의 기본 cp949 콘솔에서도 Python의 긴 대시·한글 로그가
+    # 인코딩 오류로 실패하지 않게 표준 출력을 UTF-8로 고정한다.
+    $env:PYTHONIOENCODING = "utf-8"
     foreach ($exe in @("python", "py")) {
         try {
             # stderr 를 합치지 않는다. PowerShell 5.1 은 네이티브 명령의 stderr 를
             # 오류로 감싸서, 경고 한 줄만 나와도 실패로 처리해 버린다.
-            $out = & $exe $Py
+            $pythonOutput = & $exe $Py
             if ($LASTEXITCODE -eq 0) {
-                $out | ForEach-Object { Write-Output $_ }
+                $pythonOutput | ForEach-Object { Write-Output $_ }
                 exit 0
             }
         } catch {
