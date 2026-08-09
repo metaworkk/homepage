@@ -378,6 +378,7 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 /* 전광판은 확대 호버·커서 포인터가 필요 없음 */
 .wp-media--sign { cursor: default; }
 
+
 /* 액자 안에서는 화면폭이 아니라 액자폭 기준으로 칸 크기를 잡아야
    여백을 먹지 않고 정확히 들어감 (20칸 + 19간격 ≈ 95%) */
 .wp-media--sign .flipband { container-type: inline-size; }
@@ -694,23 +695,28 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 }
 .lightbox.open { opacity: 1; visibility: visible; }
 .lb-body {
-  /* 작품 화면의 미디어와 동일한 크기 — 클릭해도 크기가 변하지 않는다 */
-  width: min(84vw, 1280px, calc(var(--media-h) * 1.778));
+  /* 폭은 작품이 정한다 — 16:9 상자에 맞추면 세로 사진이 화면 높이까지 늘어난다 */
+  width: fit-content;
+  max-width: 88vw;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
 }
 .lb-slide {
-  aspect-ratio: 16 / 9;
-  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.lb-slide .ph { height: 100%; }
+.lb-slide .ph { height: 60svh; aspect-ratio: 16 / 9; }
 .lb-slide img,
 .lb-slide video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
   display: block;
+  /* 어떤 비율이든 화면 안에 들어오게 — 세로 사진도 과하게 커지지 않는다 */
+  max-height: 68svh;
+  max-width: 88vw;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 .lb-desc {
   font-size: 1rem;
@@ -819,6 +825,21 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   aspect-ratio: var(--ratio, 16 / 9);
   background: #181818;
   border: 1px solid var(--line);
+}
+/* 전광판은 사진·영상과 달리 원본 비율이 없어 크기 기준이 필요하다.
+   (액자를 없앤 뒤 43x60 으로 쪼그라들어 화면에서 사라졌었음) */
+.wp-media--sign {
+  /* 부모가 fit-content 라서 % 는 순환 참조가 된다. 화면 기준 절대값으로 준다 */
+  width: min(88vw, calc(var(--media-h) * 16 / 9));
+  height: var(--media-h);
+}
+.wp-media--sign .flipband { width: 100%; height: 100%; }
+
+/* 모바일 — 캡션이 늘 화면폭을 채우므로 .wp-inner 의 폭은 캡션이 정한다.
+   그래서 세로·정사각 사진처럼 폭이 좁은 작품은 그 안에서 왼쪽에 붙어버린다.
+   좁은 화면에서는 사진을 가운데로 보낸다. */
+@media (max-width: 720px) {
+  .wp-media { margin-left: auto; margin-right: auto; }
 }
 
 /* 캡션 — 사진 바로 아래, 왼쪽 정렬. 제목·설명 글자 크기 동일 */
