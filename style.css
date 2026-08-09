@@ -1214,6 +1214,25 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   justify-content: flex-start;
   text-align: left;
 }
+/* 프로필 사진 — 메일 주소 위. 사진이 화면을 다 먹지 않도록 폭을 묶어 둔다 */
+.contact-photo {
+  margin: 0 0 2.4rem;
+  max-width: min(38rem, 100%);
+}
+.contact-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* 연락처는 한 화면 안에 들어와야 하므로 사진 높이를 제한한다 */
+  max-height: 46svh;
+  object-fit: cover;
+  object-position: center;
+}
+@media (max-width: 720px) {
+  .contact-photo { margin-bottom: 1.8rem; }
+  .contact-photo img { max-height: 34svh; }
+}
+
 .contact-lead {
   font-size: var(--fs-lead);
   font-weight: 700;
