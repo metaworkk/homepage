@@ -1,0 +1,24 @@
+# Cloudflare Pages 설정
+#
+# 여기 있는 이유는 하나뿐이다 — functions/api/prayers.js 가 쓸 KV 를 붙이기 위해서.
+# 이 파일이 없으면 대시보드에서 손으로 바인딩해야 하고, 그러면 다른 PC 나
+# 새로 만든 프로젝트에서 설정이 재현되지 않는다.
+#
+# 주의: pages_build_output_dir 이 있으면 `wrangler pages deploy` 에 폴더를
+#       인자로 또 주면 안 된다. sync-deploy.ps1 에서 뒤의 "." 을 뺐다.
+
+name = "metawork"
+pages_build_output_dir = "."
+compatibility_date = "2026-08-13"
+
+# 소원 카운터 저장소. 변수명 PRAYERS 는 functions/api/prayers.js 의 env.PRAYERS 와 같아야 한다.
+[[kv_namespaces]]
+binding = "PRAYERS"
+id = "aad8977f3e884f059fd54261face3b3c"
+
+# 미리보기 배포(테스트 브랜치)에서도 같은 저장소를 쓴다.
+# 따로 두고 싶으면 네임스페이스를 하나 더 만들어 여기 id 만 바꾸면 된다.
+[env.preview]
+[[env.preview.kv_namespaces]]
+binding = "PRAYERS"
+id = "aad8977f3e884f059fd54261face3b3c"

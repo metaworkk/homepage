@@ -29,20 +29,22 @@ async function readCounts(kv) {
   });
 }
 
-function respond(counts) {
+// bound=false 면 KV 바인딩이 아직 없다는 뜻. 클라이언트는 이때 리더보드를
+// 숨긴다 — 0 이 네 줄 뜬 빈 순위표를 보여주느니 없는 편이 낫다.
+function respond(counts, bound) {
   return new Response(
-    JSON.stringify({ counts, total: counts.reduce((a, b) => a + b, 0) }),
+    JSON.stringify({ counts, total: counts.reduce((a, b) => a + b, 0), bound }),
     { headers: JSON_HEADERS }
   );
 }
 
 export async function onRequestGet({ env }) {
-  return respond(await readCounts(env.PRAYERS));
+  return respond(await readCounts(env.PRAYERS), !!env.PRAYERS);
 }
 
 export async function onRequestPost({ request, env }) {
   const kv = env.PRAYERS;
-  if (!kv) return respond(new Array(SLOTS).fill(0));
+  if (!kv) return respond(new Array(SLOTS).fill(0), false);
 
   let index;
   try {
@@ -69,7 +71,7 @@ export async function onRequestPost({ request, env }) {
 
   const counts = await readCounts(kv);
   counts[index] = next; // KV 는 최종 일관성이라 방금 쓴 값이 안 읽힐 수 있다
-  return respond(counts);
+  return respond(counts, true);
 }
 
 export async function onRequestOptions() {

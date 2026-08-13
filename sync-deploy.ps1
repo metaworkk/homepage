@@ -33,10 +33,20 @@ function Get-Md5($text) {
 # 배포될 내용의 지문. 캐시 버전(?v=NN)은 결과이지 원인이 아니므로 제외한다.
 function Get-Fingerprint {
     $parts = ""
-    foreach ($f in @("index.html", "style.css", "script.js")) {
-        $t = Get-Content (Join-Path $Root $f) -Raw -Encoding UTF8
+    # wrangler.toml 은 KV 바인딩이 들어 있어 바뀌면 재배포가 필요하다.
+    foreach ($f in @("index.html", "style.css", "script.js", "wrangler.toml")) {
+        $fp = Join-Path $Root $f
+        if (-not (Test-Path $fp)) { continue }
+        $t = Get-Content $fp -Raw -Encoding UTF8
         $t = $t -replace '\?v=\d+', ''
         $parts += Get-Md5 $t
+    }
+    # Pages Functions (/api/*) — 여기가 바뀌어도 배포해야 한다
+    $fnDir = Join-Path $Root "functions"
+    if (Test-Path $fnDir) {
+        $fn = Get-ChildItem $fnDir -Recurse -File | Sort-Object FullName |
+              ForEach-Object { Get-Md5 (Get-Content $_.FullName -Raw -Encoding UTF8) }
+        $parts += Get-Md5 ($fn -join "")
     }
     # 미디어는 내용 대신 이름·크기·수정시각으로 (용량이 커서 해시는 비쌈)
     # manifest.json 은 이 스크립트가 만들어내는 결과물이라 제외한다.
@@ -130,7 +140,8 @@ if ($big) {
 Say "배포 시작..."
 # stderr 를 합치지 않는다. PowerShell 5.1 은 네이티브 명령의 stderr 를 오류로 감싸므로
 # npm 이 "npm notice" 한 줄만 내보내도 ErrorActionPreference=Stop 에 걸려 배포가 끊긴다.
-$out = & npx --yes wrangler@latest pages deploy . --project-name=metawork --branch=portfolio --commit-dirty=true
+# wrangler.toml 의 pages_build_output_dir 이 배포 폴더를 정하므로 뒤에 "." 을 주면 안 된다.
+$out = & npx --yes wrangler@latest pages deploy --project-name=metawork --branch=portfolio --commit-dirty=true
 $out | Where-Object { $_ -notmatch '^npm notice' } | ForEach-Object { Say "  $_" }
 
 # 캐시 숫자는 배포 산출물에만 필요하다. 로컬에 남겨두면 작업 트리가 dirty가 되어
