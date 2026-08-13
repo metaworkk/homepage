@@ -108,6 +108,10 @@ $raw  = $raw -replace 'script\.js\?v=\d+', "script.js?v=$next"
 # 메타버스 임베드도 같이. 이게 없으면 브라우저가 예전 meta/index.html 을 계속 쓰는데,
 # 거기 적힌 옛 번들 파일명은 새로 배포하면서 사라져 빈 화면이 된다.
 $raw  = $raw -replace 'meta/index\.html\?solo=1&amp;v=\d+', "meta/index.html?solo=1&amp;v=$next"
+# 파비콘도 같이. 파일만 바꾸면 브라우저가 예전 아이콘을 계속 보여준다.
+$raw  = $raw -replace 'favicon\.ico\?v=\d+',          "favicon.ico?v=$next"
+$raw  = $raw -replace 'favicon\.svg\?v=\d+',          "favicon.svg?v=$next"
+$raw  = $raw -replace 'apple-touch-icon\.png\?v=\d+', "apple-touch-icon.png?v=$next"
 Set-Content $html -Value $raw -Encoding UTF8 -NoNewline
 Say "캐시 버전: v$cur -> v$next"
 
@@ -124,7 +128,9 @@ if ($big) {
 # --branch 를 반드시 지정한다. 생략하면 git 브랜치명(main)으로 나가는데
 # 이 프로젝트의 프로덕션 브랜치는 "portfolio" 라서 라이브 도메인에 반영되지 않는다.
 Say "배포 시작..."
-$out = & npx --yes wrangler@latest pages deploy . --project-name=metawork --branch=portfolio --commit-dirty=true 2>&1
+# stderr 를 합치지 않는다. PowerShell 5.1 은 네이티브 명령의 stderr 를 오류로 감싸므로
+# npm 이 "npm notice" 한 줄만 내보내도 ErrorActionPreference=Stop 에 걸려 배포가 끊긴다.
+$out = & npx --yes wrangler@latest pages deploy . --project-name=metawork --branch=portfolio --commit-dirty=true
 $out | Where-Object { $_ -notmatch '^npm notice' } | ForEach-Object { Say "  $_" }
 
 # 캐시 숫자는 배포 산출물에만 필요하다. 로컬에 남겨두면 작업 트리가 dirty가 되어
