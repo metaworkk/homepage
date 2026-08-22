@@ -643,10 +643,27 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   .pg-item figcaption { display: none; }
 }
 
-/* 좁은 화면 — 데스크톱 크기 그대로 두면 한 줄에 두 장씩 들어가
-   갤러리가 여섯 화면 높이까지 늘어난다. 화면폭에 맞춰 줄인다. */
+/* 좁은 화면 — 규격 그리드로.
+
+   넓은 화면에서는 사진마다 폭이 달라 오른쪽 끝이 들쭉날쭉한 게 리듬이 된다.
+   그런데 폭이 좁으면 한 줄에 두 장밖에 안 들어가서, 줄 끝마다 평균 59px·
+   최대 222px 이 비어 '만들다 만' 화면처럼 보인다. (실측: 32줄 · 4.9화면)
+
+   그래서 모바일에서는 세로 3칸 정사각으로 맞춘다. 빈틈이 사라지고,
+   타일도 90px 에서 106px 로 오히려 커지며, 전체 길이는 4.0화면으로 줄어든다.
+   사진이 잘리지만(cover) 여기는 인덱스라 누르면 원본 비율로 볼 수 있다. */
 @media (max-width: 720px) {
-  .photogrid { --pg-h: clamp(78px, 24vw, 140px); }
+  .photogrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-content: start;
+  }
+  /* 폭은 칸이 정하고 높이는 정사각 — 원본 비율(--r)과 --pg-h 를 모두 덮는다 */
+  .pg-item {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-width: none;
+  }
 }
 
 /* 마우스오버 배경 — 작품 사진을 화면 가득 크게 (팝업 전 미리보기) */
