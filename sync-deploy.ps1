@@ -14,7 +14,10 @@ $ErrorActionPreference = "Stop"
 try { [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch {}
 $OutputEncoding = [Text.Encoding]::UTF8
 
-$Root  = "C:\Users\meta\Downloads\portfolio"
+# 저장소 위치는 이 스크립트가 놓인 자리에서 알아낸다.
+# 예전에는 경로를 적어 두었는데, PC 마다 폴더가 달라 다른 PC 에서 돌리면
+# 첫 줄에서 멈췄다. 이제 어느 PC 에 복제하든 그대로 동작한다.
+$Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $Log   = Join-Path $Root "sync-deploy.log"
 $Stamp = Join-Path $Root ".assets-hash"
 
