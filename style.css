@@ -77,6 +77,12 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-snap-type: none; }
 }
+/* 긴 글(TEXT) 구간에 들어오면 스냅을 아예 끈다.
+   한 화면보다 훨씬 긴 구간에서 스냅이 켜져 있으면, 글 중간에서 손을 떼는 순간
+   브라우저가 위아래 스냅 지점 중 가까운 쪽으로 끌어당겨 화면이 튄다.
+   (특히 모바일 관성 스크롤에서 위로 튕겨 올라간다)
+   script.js 가 #text 가 보이는 동안 이 클래스를 붙였다 뗀다. */
+html.snap-off { scroll-snap-type: none; }
 
 body {
   background: var(--paper);
@@ -1241,6 +1247,15 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   line-height: 1.5;
   margin-bottom: 2.4rem;
 }
+/* 메일 주소 윗줄 */
+.contact-place {
+  font-size: var(--fs-body);
+  font-weight: 500;
+  letter-spacing: var(--loose);
+  color: var(--ink-soft);
+  margin-bottom: 0.6rem;
+}
+
 .contact-email {
   display: inline-block;
   font-family: var(--sans);

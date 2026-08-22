@@ -1064,80 +1064,38 @@
   document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
 
   /* ----------------------------------------------------------
-     연락처 이메일 — 글자가 흩어졌다 제자리를 찾는다.
-     전광판 작품과 같은 원리(문자를 순서대로 돌려 목표 글자에서 멈춤).
-     주소는 index.html 의 data-email 에서 읽습니다.
+     긴 글 구간에서는 스냅을 끈다.
+
+     TEXT 는 한 화면보다 훨씬 길다. 스냅이 켜진 채로 글 중간에서 손을 떼면
+     브라우저가 위아래 스냅 지점 중 가까운 쪽으로 끌어당겨 화면이 튄다.
+     모바일 관성 스크롤에서는 위로 튕겨 올라가 글을 읽을 수가 없다.
+     구간이 보이는 동안에만 스냅을 꺼 둔다.
      ---------------------------------------------------------- */
-  const emailEl = document.getElementById("contactEmail");
+  const longRead = document.getElementById("text");
 
-  if (emailEl) {
-    const TARGET = (emailEl.dataset.email || emailEl.textContent).trim();
-    const POOL = "abcdefghijklmnopqrstuvwxyz0123456789@._-";
-    const FIXED = new Set(["@", ".", "-", "_"]);   // 기호는 처음부터 제자리
+  if (longRead) {
+    const root = document.documentElement;
 
-    if (reducedMotion) {
-      emailEl.textContent = TARGET;
-    } else {
-      let cells = [];
-      let timer = null;
+    /* 구간에 닿기 조금 전에 미리 꺼 둔다. 도착한 뒤에 끄면
+       이미 스냅이 걸린 상태라 한 번 튕기고 나서 풀린다. */
+    const near = () => {
+      const r = longRead.getBoundingClientRect();
+      const margin = innerHeight * 0.5;
+      return r.top < innerHeight + margin && r.bottom > -margin;
+    };
+    const apply = () => root.classList.toggle("snap-off", near());
 
-      // 글자마다 목표까지 돌아야 할 횟수를 달리 줘서 물결처럼 맞춰진다
-      const scramble = () => {
-        cells = [...TARGET].map((ch, i) => ({
-          ch,
-          left: FIXED.has(ch) ? 0 : 6 + i * 2 + Math.floor(Math.random() * 8)
-        }));
-        emailEl.textContent = render();
-      };
-      const render = () =>
-        cells.map((c) => (c.left <= 0 ? c.ch
-          : POOL[Math.floor(Math.random() * POOL.length)])).join("");
-
-      const settle = () => {
-        if (timer) return;
-        timer = setInterval(() => {
-          let done = true;
-          for (const c of cells) {
-            if (c.left > 0) { c.left--; done = false; }
-          }
-          emailEl.textContent = render();
-          if (done) { clearInterval(timer); timer = null; emailEl.textContent = TARGET; }
-        }, 45);
-      };
-
-      const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
-      // 화면 안에 조금이라도 걸치면 '보인다'로 본다
-      const visible = () => {
-        const r = emailEl.getBoundingClientRect();
-        return r.top < innerHeight && r.bottom > 0;
-      };
-      // 되돌리기는 화면에서 확실히 벗어났을 때만 (스크롤 중 깜빡임 방지)
-      const gone = () => {
-        const r = emailEl.getBoundingClientRect();
-        return r.top > innerHeight * 1.5 || r.bottom < -innerHeight * 0.5;
-      };
-
-      scramble();
-
-      /* 화면에 들어올 때마다 다시 맞춰지도록 —
-         한 번 보고 지나쳤다가 돌아와도 연출이 재생된다 */
-      let shown = false;
-      const check = () => {
-        if (visible()) {
-          if (!shown) { shown = true; settle(); }
-        } else if (shown && gone()) {
-          shown = false; stop(); scramble();     // 멀리 벗어나면 다시 흩어 놓는다
-        }
-      };
-
-      const io = new IntersectionObserver(check, { threshold: [0, 0.35, 0.7] });
-      io.observe(emailEl);
-      // 관찰자가 동작하지 않는 환경 대비 (스크롤로도 판정)
-      addEventListener("scroll", check, { passive: true });
-      emailEl.addEventListener("mouseenter", () => { shown = true; settle(); });
-      check();
-    }
+    const snapObserver = new IntersectionObserver(apply, { threshold: 0 });
+    snapObserver.observe(longRead);
+    /* 관찰자만 믿지 않는다 — 스크롤로도 판정한다.
+       (일부 환경에서 관찰자 콜백이 오지 않는 경우가 있다) */
+    addEventListener("scroll", apply, { passive: true });
+    addEventListener("resize", apply, { passive: true });
+    apply();
   }
+
+  /* 연락처 이메일 — 예전에는 글자가 흩어졌다 제자리를 찾는 연출이 있었으나
+     제거했다. 지금은 index.html 에 적힌 주소를 그대로 보여 준다. */
 
   /* ----------------------------------------------------------
      푸터 — 서울 시간
