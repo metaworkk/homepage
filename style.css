@@ -1247,9 +1247,9 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   line-height: 1.5;
   margin-bottom: 2.4rem;
 }
-/* 메일 주소 윗줄 */
+/* 메일 주소 윗줄 — 주소와 같은 크기로 맞춘다 */
 .contact-place {
-  font-size: var(--fs-body);
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: var(--loose);
   color: var(--ink-soft);
@@ -1259,16 +1259,13 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 .contact-email {
   display: inline-block;
   font-family: var(--sans);
-  font-size: var(--fs-body);
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: var(--loose);
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 0.25rem;
-  transition: color 0.35s, border-color 0.35s;
+  transition: color 0.35s;
 }
 .contact-email:hover {
   color: var(--key);
-  border-color: var(--key);
 }
 .contact-links {
   margin-top: 3rem;

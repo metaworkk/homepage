@@ -107,7 +107,35 @@ if ($now -eq $prev -and -not $Force) {
     exit 0
 }
 
-# ── 3) 캐시 버전 자동 갱신 (css/js 가 바뀐 경우만) ──
+# ── 3) 안전장치 — git 에 없는 폴더가 빠진 채 배포되는 것을 막는다 ──
+# 검사는 캐시 버전을 올리기 전에 한다. 뒤에 두면 여기서 중단할 때
+# index.html 이 고쳐진 채로 남아 작업 트리가 더러워진다.
+# meta/ 와 video/ 는 .gitignore 에 있어 저장소로 옮겨지지 않는다.
+# 그래서 이 폴더들이 없는 PC 에서 배포하면 라이브에서 통째로 사라진다.
+# (실제로 meta/ 가 사라져 히어로의 메타버스 임베드가 사이트 자신을 불러온 적이 있다)
+$needed = @(
+    @{ Path = "meta\index.html";  What = "메타버스 임베드" },
+    @{ Path = "video";             What = "영상 미리보기" }
+)
+$absent = $needed | Where-Object { -not (Test-Path (Join-Path $Root $_.Path)) }
+if ($absent) {
+    Say "중단: 배포에 필요한 파일이 이 PC 에 없습니다."
+    $absent | ForEach-Object { Say ("  {0}  ({1})" -f $_.Path, $_.What) }
+    Say "      이대로 올리면 라이브에서 해당 부분이 사라집니다."
+    Say "      파일을 갖춘 PC 에서 배포하거나, 그 폴더를 이 PC 로 옮긴 뒤 다시 실행하세요."
+    exit 1
+}
+
+# ── 4) 안전장치 — Pages 는 파일당 25MB 를 넘으면 업로드가 실패한다 ──
+$big = Get-ChildItem $Root -Recurse -File |
+       Where-Object { $_.Length -gt 25MB -and $_.FullName -notmatch '\\\.git\\' }
+if ($big) {
+    Say "중단: 25MB 초과 파일이 있습니다."
+    $big | ForEach-Object { Say ("  {0:N1}MB  {1}" -f ($_.Length/1MB), $_.FullName.Replace($Root,'.')) }
+    exit 1
+}
+
+# ── 5) 캐시 버전 자동 갱신 (css/js 가 바뀐 경우만) ──
 $html = Join-Path $Root "index.html"
 $rawOriginal = Get-Content $html -Raw -Encoding UTF8
 $raw  = $rawOriginal
@@ -128,16 +156,7 @@ $raw  = $raw -replace 'apple-touch-icon\.png\?v=\d+', "apple-touch-icon.png?v=$n
 Set-Content $html -Value $raw -Encoding UTF8 -NoNewline
 Say "캐시 버전: v$cur -> v$next"
 
-# ── 4) 안전장치 — Pages 는 파일당 25MB 를 넘으면 업로드가 실패한다 ──
-$big = Get-ChildItem $Root -Recurse -File |
-       Where-Object { $_.Length -gt 25MB -and $_.FullName -notmatch '\\\.git\\' }
-if ($big) {
-    Say "중단: 25MB 초과 파일이 있습니다."
-    $big | ForEach-Object { Say ("  {0:N1}MB  {1}" -f ($_.Length/1MB), $_.FullName.Replace($Root,'.')) }
-    exit 1
-}
-
-# ── 5) 배포 ──
+# ── 6) 배포 ──
 # --branch 를 반드시 지정한다. 생략하면 git 브랜치명(main)으로 나가는데
 # 이 프로젝트의 프로덕션 브랜치는 "portfolio" 라서 라이브 도메인에 반영되지 않는다.
 Say "배포 시작..."
