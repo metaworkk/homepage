@@ -221,7 +221,7 @@
        /* ── 사진 작업 (궤도 윗줄) ──
        row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
     { row: 0, featured: true, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, place: "Performed at 국립아시아문화전당, Gwang-ju", desc: "연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작" },
-    { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
+    { row: 0, featured: true, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
     { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, place: "Performed at TINC, Seoul", desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제" },
     { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "메타버스 아바타 제작"  },
     { row: 0, folder: "photo01", title: "국군난수체조 - 암호화된 숫자로 구성된 건강한 신체를 위한 체조 비디오", meta: "Mixed media with Single channel video · 2015", count: 3, place: "Performed at 175 gallery, Seoul", desc: "국군 난수체조는 단파라디오로 수집한 난수방송의 숫자를 신체의 움직임으로 변환한 비디오 작업이다. 난수방송의 숫자는 해독 체계를 공유하지 않는 사람에게는 의미 없는 나열이지만, 특정한 수신자에게는 행동을 지시하는 정보가 된다. 수집된 숫자는 무용과 운동의 기호로 변환되고, 다시 국군도수체조의 동작으로 구성된다. 숫자에서 기호로, 기호에서 신체로 옮겨가면서 읽을 수 없었던 정보는 또 다른 방식의 수행 가능한 명령이 된다." },
@@ -291,7 +291,7 @@
       desc: "AIA생명-슈퍼스타K7 캠페인" },
   
 
-    { row: 0, featured: true, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "국민대학교는 2023년 성북구청과 함께 관내 중학생들을 대상으로 '2023 인공지능 미래탐색' 진로교육을 진행" },       
+    { row: 0, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "국민대학교는 2023년 성북구청과 함께 관내 중학생들을 대상으로 '2023 인공지능 미래탐색' 진로교육을 진행" },       
     { row: 0, folder: "photo08", title: "큐리오바이트", meta: "STEAM education · 2016-2019", count: 7, desc: "" },
 
 
