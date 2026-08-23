@@ -938,6 +938,13 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   .lightbox { gap: 0.2rem; }
 }
 
+/* RECENT WORKS 표제 — 한 화면을 통째로 쓰지 않는다.
+   구분만 지어주면 되는 자리라 snap 대상에서도 뺀다. */
+.recent-head {
+  min-height: 0;
+  padding-top: clamp(3rem, 8svh, 5rem);
+  padding-bottom: clamp(1rem, 3svh, 2rem);
+}
 /* ------------------------------------------------------------
    작품 페이지 — 한 작품당 한 화면 (WORKS 배열로 생성)
    ------------------------------------------------------------ */
@@ -1123,6 +1130,28 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
 }
 
 /* 줄글 */
+/* 접힌 글 — 제목·형식만 보이고 "읽기" 를 누르면 펴진다 */
+.tx-toggle {
+  margin-top: 1rem;
+  padding: 0.5rem 1.1rem;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--wide);
+  text-transform: uppercase;
+  cursor: none;
+  transition: color 0.3s, border-color 0.3s;
+}
+.tx-toggle:hover { color: var(--key); border-color: var(--key); }
+@media (hover: none), (pointer: coarse) { .tx-toggle { cursor: pointer; } }
+
+/* 접혀 있을 때는 글 사이 간격을 줄인다 — 제목만 늘어선 목록이 되므로 */
+.tx-collapsible:not(.tx-open) + .tx-collapsible:not(.tx-open) {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+}
 .tx-p + .tx-p { margin-top: 1.5rem; }
 
 /* 대담 — 말한 이를 왼쪽에 걸고 본문은 한 줄로 이어지게(행잉 인덴트).

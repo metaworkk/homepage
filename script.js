@@ -74,6 +74,49 @@
     });
   }
 
+
+  /* ----------------------------------------------------------
+     TEXT — 긴 글은 접어 둔다
+
+     두 편이 8.9화면이라, 작품을 다 본 직후에 그만큼의 글이 이어지면
+     읽히기보다 스크롤로 지나가 버린다. 평소에는 제목·형식만 보여주고
+     누른 사람에게만 편다.
+     JS 가 없으면 접히지 않고 그냥 다 보인다 — 글이 사라지진 않는다.
+     ---------------------------------------------------------- */
+  document.querySelectorAll("article.tx").forEach((art) => {
+    const body = art.querySelector(".tx-body");
+    const title = art.querySelector(".tx-title");
+    if (!body || !title) return;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tx-toggle";
+
+    const label = () => {
+      const open = art.classList.contains("tx-open");
+      btn.textContent = open ? "접기" : "읽기";
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) body.removeAttribute("hidden");
+      else body.setAttribute("hidden", "");
+    };
+
+    // 제목을 눌러도 열리게 — 버튼만 노리는 것보다 손이 편하다
+    const toggle = () => {
+      const willClose = art.classList.contains("tx-open");
+      art.classList.toggle("tx-open");
+      label();
+      // 접을 때는 글 머리로 돌려보낸다. 안 그러면 화면이 갑자기 뚝 떨어진다
+      if (willClose) art.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    btn.addEventListener("click", toggle);
+    title.addEventListener("click", toggle);
+    title.style.cursor = "pointer";
+
+    art.classList.add("tx-collapsible");
+    (art.querySelector(".tx-meta") || title).insertAdjacentElement("afterend", btn);
+    label();
+  });
   /* ----------------------------------------------------------
      히어로 크로스헤어 — 마우스를 따라가는 직선
      ---------------------------------------------------------- */
@@ -168,7 +211,7 @@
         /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
        phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
        표시 가능 문자: A-Z, 0-9, 공백, - / (한글 불가) */
-    { type: "sign", folder: "sign", title: "인스타그램 매니페스토",
+    { type: "sign", featured: true, folder: "sign", title: "인스타그램 매니페스토",
       meta: "Split-flap display, instagram dataset · 2026", count: 0,
       poster: "video/sign-poster.jpg",
       place: "Performed at Web", desc: "",
@@ -177,7 +220,7 @@
 
        /* ── 사진 작업 (궤도 윗줄) ──
        row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
-    { row: 0, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, place: "Performed at 국립아시아문화전당, Gwang-ju", desc: "연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작" },
+    { row: 0, featured: true, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, place: "Performed at 국립아시아문화전당, Gwang-ju", desc: "연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작" },
     { row: 0, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
     { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, place: "Performed at TINC, Seoul", desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제" },
     { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "메타버스 아바타 제작"  },
@@ -194,16 +237,16 @@
     
    
 
-    { folder: "force", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
+    { featured: true, folder: "force", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
       video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/force-poster.jpg",
       place: "Performed at 아르코예술극장 소극장, Seoul",
       desc: "어떤 힘은 직접 보이지 않지만 관계와 변화 속에서 드러나는 힘에서 출발한다. 서로 떨어져 있는 대상 사이의 비가시적인 연결과 영향은 사운드, 사물의 움직임, 신체의 반응으로 이어진다. 무대 위의 오브제와 소리는 서로를 움직이고, 무용수는 이미 작동하고 있는 환경 안에서 그 힘을 감지하고 반응한다. 힘은 그 자체로 나타나지 않는다. 대신 진동하고, 이동하고, 흔들리는 것들의 변화 속에서 잠시 모습을 드러낸다." },
-    { folder: "adg7", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
+    { featured: true, folder: "adg7", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
       video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
       place: "Performed at 남산국악당, Seoul",
       desc: "PAMS CHOICE 악단광칠 NEXT JOURNEY" },
     /* 영상이 여러 편인 작품 — 편을 추가하려면 videos 배열에 한 줄씩 넣으면 됩니다 */
-    { folder: "float", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
+    { featured: true, folder: "float", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
       videos: [
         { web: "video/float-01-web.mp4", hq: "https://video.metawork.org/float-01.mp4" },
         { web: "video/float-02-web.mp4", hq: "https://video.metawork.org/float-02.mp4" },
@@ -248,7 +291,7 @@
       desc: "AIA생명-슈퍼스타K7 캠페인" },
   
 
-    { row: 0, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "국민대학교는 2023년 성북구청과 함께 관내 중학생들을 대상으로 '2023 인공지능 미래탐색' 진로교육을 진행" },       
+    { row: 0, featured: true, folder: "photo07", title: "국민대 2023 인공지능 미래탐색 VR/AR분야" , meta: "VR/AR분야 진로교육ㆍ체험특강 · 2023", count: 1, desc: "국민대학교는 2023년 성북구청과 함께 관내 중학생들을 대상으로 '2023 인공지능 미래탐색' 진로교육을 진행" },       
     { row: 0, folder: "photo08", title: "큐리오바이트", meta: "STEAM education · 2016-2019", count: 7, desc: "" },
 
 
@@ -386,9 +429,17 @@
 
   if (workPages) {
     WORKS.forEach((w, i) => {
+      /* 선형으로 펼치는 건 featured 로 표시한 작품뿐이다 (RECENT WORKS).
+         나머지는 WORK 그리드와 디테일 샷이 맡는다.
+         작품 화면에는 글이 없어서(캡션은 .wp-meta 로 감춰 둠) 전부 펼치면
+         그리드가 이미 보여준 대표 이미지를 25화면에 걸쳐 반복하는 셈이 된다. */
+      if (!w.featured) return;
+
       const sec = document.createElement("section");
       sec.className = "section workpage snap";
       sec.id = "work" + String(i + 1).padStart(2, "0");
+      // 일부만 펼치므로 화면 순서와 WORKS 번호가 어긋난다. 번호를 새겨 둔다.
+      sec.dataset.index = i;
 
       const cover = w.video || w.poster || w.images[0];
       let media;
@@ -837,22 +888,24 @@
       lbRender();
     }
 
-    /* 갤러리는 인덱스 역할 — 누르면 해당 작품 페이지로 이동.
+    /* 갤러리는 인덱스 역할 — 누르면 디테일 샷을 연다.
+       예전에는 해당 작품 화면으로 스크롤했는데, 지금은 featured 6점만 펼쳐
+       어떤 작품은 이동하고 어떤 작품은 팝업이 뜨는 식으로 갈렸다.
+       팝업에 사진 전부와 글이 다 있으므로 전부 팝업으로 통일한다.
        그리드에서는 한 작품에 사진이 여러 장이므로 순번이 아니라
        타일에 적어 둔 작품 번호(dataset.index)를 따라간다. */
     cards.forEach((c) => {
       c.addEventListener("click", () => {
         if (movedPx > 8) return; // 드래그였다면 클릭 무시
-        const i = Number(c.dataset.index);
-        const page = document.getElementById("work" + String(i + 1).padStart(2, "0"));
-        if (page) page.scrollIntoView({ behavior: "smooth", block: "start" });
-        else lbOpen(i);
+        lbOpen(Number(c.dataset.index));
       });
     });
 
     // 작품 페이지에서 사진·버튼을 누르면 라이트박스로 전체 장수 보기
     if (workPages) {
-      [...workPages.children].forEach((sec, i) => {
+      [...workPages.children].forEach((sec) => {
+        // 화면 순서가 아니라 새겨 둔 WORKS 번호를 쓴다 (일부만 펼치므로)
+        const i = Number(sec.dataset.index);
         const open = () => lbOpen(i);
         const media = sec.querySelector(".wp-media");
         media?.addEventListener("click", open);
