@@ -1320,16 +1320,20 @@ body.loaded .hero-embed { opacity: 1; transform: translateY(0); transition-delay
   font-weight: 500;
   letter-spacing: var(--loose);
   color: var(--ink-soft);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0;                /* 메일 주소를 바로 아랫줄에 붙인다 */
 }
 
 .contact-email {
-  display: inline-block;
+  display: block;                  /* 윗줄(based in seoul) 바로 아래로 */
+  width: fit-content;
   font-family: var(--sans);
-  font-size: var(--fs-lead);       /* 사이트의 유일한 행동 유도인데 12px 이었다 */
+  font-size: var(--fs-micro);      /* 윗줄과 같은 크기 */
   font-weight: 500;
   letter-spacing: var(--loose);
-  padding: 0.6rem 0;               /* 손가락으로 누를 높이 확보 */
+  line-height: inherit;            /* 윗줄과 같은 줄 간격으로 이어지게 */
+  /* 글자는 작게 두되 누를 영역은 확보한다 (손가락 기준 44px) */
+  padding: 0.55rem 0;
+  margin-top: -0.55rem;            /* 늘어난 패딩만큼 위로 당겨 줄 간격 유지 */
   transition: color 0.35s;
 }
 .contact-email:hover {

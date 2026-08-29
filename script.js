@@ -1196,18 +1196,18 @@
      제거했다. 지금은 index.html 에 적힌 주소를 그대로 보여 준다. */
 
   /* ----------------------------------------------------------
-     푸터 — 서울 시간
+     시계 — 푸터의 서울 시간은 뺐다.
+     히어로에 #heroClock 을 되살리면 그때만 돈다.
      ---------------------------------------------------------- */
-  const footerTime = document.getElementById("footerTime");
   const heroClock = document.getElementById("heroClock");
-  function tickClock() {
-    const now = new Date().toLocaleTimeString("en-GB", {
-      timeZone: "Asia/Seoul",
-      hour12: false
-    });
-    footerTime.textContent = "SEOUL " + now;
-    if (heroClock) heroClock.textContent = "SEOUL " + now;
+  if (heroClock) {
+    const tickClock = () => {
+      heroClock.textContent = "SEOUL " + new Date().toLocaleTimeString("en-GB", {
+        timeZone: "Asia/Seoul",
+        hour12: false
+      });
+    };
+    tickClock();
+    setInterval(tickClock, 1000);
   }
-  tickClock();
-  setInterval(tickClock, 1000);
 })();
