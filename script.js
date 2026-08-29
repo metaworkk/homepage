@@ -232,7 +232,7 @@
         /* 전광판 작품 — type:"sign" 이면 영상 대신 세그먼트 디스플레이가 들어갑니다.
        phrases / phrasesSub 는 각각 윗줄·아랫줄 문구.
        표시 가능 문자: A-Z, 0-9, 공백, - / (한글 불가) */
-    { type: "sign", featured: true, folder: "sign", title: "인스타그램 매니페스토",
+    { type: "sign", featured: 1, folder: "sign", title: "인스타그램 매니페스토",
       meta: "Split-flap display, instagram dataset · 2026", count: 0,
       poster: "video/sign-poster.jpg",
       place: "Performed at Web", desc: "",
@@ -241,8 +241,8 @@
 
        /* ── 사진 작업 (궤도 윗줄) ──
        row: 0 = 윗줄, 생략하면 아랫줄. 사진은 img/<folder>/image01.jpg … 순서로 연결 */
-    { row: 0, featured: true, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, place: "Performed at 국립아시아문화전당, Gwang-ju", desc: "연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작" },
-    { row: 0, featured: true, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
+    { row: 0, folder: "photo13", title: "내일의 이웃", meta: " AR Interactive performance with choreography, Unreal · 2022", count: 5, place: "Performed at 국립아시아문화전당, Gwang-ju", desc: "연기자의 시야를 몸 바깥에 부착시켜 새로운 감각을 느낄 수 있게 한다 <br> 외부 센서와 Unreal 엔진으로 제작" },
+    { row: 0, featured: 5, folder: "photo15", title: "말의머리", meta: "Performed on Roblox · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "한 - 벨기에 수교 120주년 기념전 《말의 머리》 전시 <br>메타버스 공간 제작" },
     { row: 0, folder: "photo14", title: "I'm the church", meta: "VR project for theater performance · 2021", count: 4, place: "Performed at TINC, Seoul", desc: "VR을 사용한 현실과 혼합된 새로운 방식의 연극, 변방연극제" },
     { row: 0, folder: "photo12", title: "영혼을 수놓은 초상", meta: "Metaverse project in Zepeto · 2022", count: 5, place: "Installation at KF gallery, Seoul", desc: "메타버스 아바타 제작"  },
     { row: 0, folder: "photo01", title: "국군난수체조 - 암호화된 숫자로 구성된 건강한 신체를 위한 체조 비디오", meta: "Mixed media with Single channel video · 2015", count: 3, place: "Performed at 175 gallery, Seoul", desc: "국군 난수체조는 단파라디오로 수집한 난수방송의 숫자를 신체의 움직임으로 변환한 비디오 작업이다. 난수방송의 숫자는 해독 체계를 공유하지 않는 사람에게는 의미 없는 나열이지만, 특정한 수신자에게는 행동을 지시하는 정보가 된다. 수집된 숫자는 무용과 운동의 기호로 변환되고, 다시 국군도수체조의 동작으로 구성된다. 숫자에서 기호로, 기호에서 신체로 옮겨가면서 읽을 수 없었던 정보는 또 다른 방식의 수행 가능한 명령이 된다." },
@@ -258,16 +258,16 @@
     
    
 
-    { featured: true, folder: "force", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
+    { featured: 2, folder: "force", title: "어떤 힘", meta: "Performance installation with choreography, and interactive media, 60 min · 2024", count: 0,
       video: "video/force-web.mp4",        videoHQ: "https://video.metawork.org/force.mp4", poster: "video/force-poster.jpg",
       place: "Performed at 아르코예술극장 소극장, Seoul",
       desc: "어떤 힘은 직접 보이지 않지만 관계와 변화 속에서 드러나는 힘에서 출발한다. 서로 떨어져 있는 대상 사이의 비가시적인 연결과 영향은 사운드, 사물의 움직임, 신체의 반응으로 이어진다. 무대 위의 오브제와 소리는 서로를 움직이고, 무용수는 이미 작동하고 있는 환경 안에서 그 힘을 감지하고 반응한다. 힘은 그 자체로 나타나지 않는다. 대신 진동하고, 이동하고, 흔들리는 것들의 변화 속에서 잠시 모습을 드러낸다." },
-    { featured: true, folder: "adg7", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
+    { featured: 4, folder: "adg7", title: "타, 드르닥", meta: "Single-channel video for concert, 12 min. · 2025", count: 0,
       video: "video/ADG7-web.mp4",         videoHQ: "https://video.metawork.org/ADG7.mp4", poster: "video/ADG7-poster.jpg",
       place: "Performed at 남산국악당, Seoul",
       desc: "PAMS CHOICE 악단광칠 NEXT JOURNEY" },
     /* 영상이 여러 편인 작품 — 편을 추가하려면 videos 배열에 한 줄씩 넣으면 됩니다 */
-    { featured: true, folder: "float", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
+    { featured: 3, folder: "float", title: "부유생물체의 여러가지 사정" , meta: "Hologram installation for choreography, 60 min · 2025", count: 0,
       videos: [
         { web: "video/float-01-web.mp4", hq: "https://video.metawork.org/float-01.mp4" },
         { web: "video/float-02-web.mp4", hq: "https://video.metawork.org/float-02.mp4" },
@@ -449,12 +449,19 @@
   const workPages = document.getElementById("workPages");
 
   if (workPages) {
-    WORKS.forEach((w, i) => {
-      /* 선형으로 펼치는 건 featured 로 표시한 작품뿐이다 (RECENT WORKS).
-         나머지는 WORK 그리드와 디테일 샷이 맡는다.
-         작품 화면에는 글이 없어서(캡션은 .wp-meta 로 감춰 둠) 전부 펼치면
-         그리드가 이미 보여준 대표 이미지를 25화면에 걸쳐 반복하는 셈이 된다. */
-      if (!w.featured) return;
+    /* 선형으로 펼치는 건 featured 를 적어 둔 작품뿐이다 (RECENT WORKS).
+       나머지는 WORK 그리드와 디테일 샷이 맡는다.
+       작품 화면에는 글이 없어서(캡션은 .wp-meta 로 감춰 둠) 전부 펼치면
+       그리드가 이미 보여준 대표 이미지를 25화면에 걸쳐 반복하는 셈이 된다.
+
+       featured 값은 곧 펼쳐지는 순서다. 순서를 바꾸려면 숫자만 바꾸면 되고
+       WORKS 배열 자체를 옮길 필요가 없다. */
+    const featuredWorks = WORKS
+      .map((w, i) => ({ w, i }))
+      .filter(({ w }) => w.featured)
+      .sort((a, b) => a.w.featured - b.w.featured);
+
+    featuredWorks.forEach(({ w, i }) => {
 
       const sec = document.createElement("section");
       sec.className = "section workpage snap";
@@ -925,6 +932,19 @@
       lbRender();
     }
 
+    /* 전광판(type:"sign")은 넘겨볼 사진이 없다 — 세그먼트 디스플레이 자체가 작품이라
+       팝업을 띄우면 빈 화면이 뜬다. 그래서 그 작품 화면으로 보낸다.
+       (RECENT WORKS 에 펼쳐져 있으므로 갈 곳이 있다) */
+    function openWork(i) {
+      const w = WORKS[i];
+      const noSlides = w.type === "sign" || !w.slides || w.slides.length === 0;
+      if (noSlides) {
+        const page = document.getElementById("work" + String(i + 1).padStart(2, "0"));
+        if (page) { page.scrollIntoView({ behavior: "instant", block: "start" }); return; }
+      }
+      lbOpen(i);
+    }
+
     /* 갤러리는 인덱스 역할 — 누르면 디테일 샷을 연다.
        예전에는 해당 작품 화면으로 스크롤했는데, 지금은 featured 6점만 펼쳐
        어떤 작품은 이동하고 어떤 작품은 팝업이 뜨는 식으로 갈렸다.
@@ -934,7 +954,7 @@
     cards.forEach((c) => {
       c.addEventListener("click", () => {
         if (movedPx > 8) return; // 드래그였다면 클릭 무시
-        lbOpen(Number(c.dataset.index));
+        openWork(Number(c.dataset.index));
       });
     });
 
@@ -943,10 +963,12 @@
       [...workPages.children].forEach((sec) => {
         // 화면 순서가 아니라 새겨 둔 WORKS 번호를 쓴다 (일부만 펼치므로)
         const i = Number(sec.dataset.index);
-        const open = () => lbOpen(i);
+        const open = () => openWork(i);
         const media = sec.querySelector(".wp-media");
-        media?.addEventListener("click", open);
-        if (media) {
+        // 전광판 화면 자신은 누를 것이 없다 — 이미 그 작품을 보고 있다
+        const isSign = WORKS[i].type === "sign";
+        if (media && !isSign) {
+          media.addEventListener("click", open);
           media.tabIndex = 0;
           media.setAttribute("role", "button");
           media.setAttribute("aria-label", WORKS[i].title + " 자세히 보기");
