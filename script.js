@@ -76,6 +76,27 @@
 
 
   /* ----------------------------------------------------------
+     상단 메뉴 이동 — 즉시 이동
+
+     예전에는 html { scroll-behavior: smooth } 로 9,800px 을 애니메이션했다.
+     그 사이 scroll-snap-stop 이 중간 스냅마다 끼어들고 TEXT 구간에서
+     스냅이 켜졌다 꺼지면서, About 을 눌러도 10초 뒤 목적지 470px 앞의
+     빈 화면에 멈췄다. 긴 거리 앵커에 부드러운 스크롤은 득이 없다.
+     ---------------------------------------------------------- */
+  document.querySelectorAll('.nav a[href^="#"], .footer a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const target = document.querySelector(a.getAttribute("href"));
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "instant", block: "start" });
+      history.replaceState(null, "", a.getAttribute("href"));
+      // 키보드 사용자가 이동 후 그 자리에서 이어서 탭 할 수 있게
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    });
+  });
+
+  /* ----------------------------------------------------------
      TEXT — 긴 글은 접어 둔다
 
      두 편이 8.9화면이라, 작품을 다 본 직후에 그만큼의 글이 이어지면
@@ -713,9 +734,19 @@
         const fig = document.createElement("figure");
         fig.className = "pg-item";
         fig.dataset.index = it.i;
+        /* 키보드로도 열려야 한다. 지금까지 그리드·작품 화면이 전부
+           click 만 받는 비포커스 요소라, 탭으로 작품에 닿을 수 없었다. */
+        fig.tabIndex = 0;
+        fig.setAttribute("role", "button");
+        fig.setAttribute("aria-label", w.title);
+        fig.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); lbOpen(it.i); }
+        });
         fig.style.setProperty("--r", ratios[k].toFixed(4));
         fig.innerHTML =
-          '<img src="' + bust(it.src) + '" alt="' + w.title + '" decoding="async">' +
+          '<img src="' + bust(it.src) + '" alt="' + w.title + '"' +
+          // 앞쪽 12장(첫 두 줄)만 즉시, 나머지는 화면에 들어올 때
+          (k < 12 ? '' : ' loading="lazy"') + ' decoding="async">' +
           '<figcaption>' + w.title + "</figcaption>";
         const img = fig.querySelector("img");
         img.addEventListener("load", () => {
@@ -797,6 +828,7 @@
     const lbCounter = document.getElementById("lbCounter");
     const lbBody = document.querySelector(".lb-body");
     let lbWork = 0, lbIdx = 0;
+    let lbScrollY = 0;   // 팝업 열기 직전 스크롤 위치
 
     /* 캡션 폭 고정 —
        캡션이 지금 보고 있는 사진의 폭을 따라가면, 가로 사진에서 세로 사진으로
@@ -869,7 +901,11 @@
       lbMeasureFirst();   // 캡션 폭은 이 작품의 첫 장 기준으로 붙들어 둔다
       lightbox.classList.add("open");
       lightbox.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+      /* body 에 걸면 안 먹는다 — html 에 overflow-x: hidden 이 있어
+         body → 뷰포트로 넘어가는 overflow 전파가 끊겨 있다.
+         잠그기 전 위치를 기억했다가 닫을 때 되돌린다. */
+      lbScrollY = window.scrollY;
+      document.documentElement.style.overflow = "hidden";
     }
 
     function lbClose() {
@@ -878,7 +914,8 @@
       lbApplyWidth();           // 다음에 열 작품이 폭을 새로 정하도록 되돌린다
       lightbox.classList.remove("open");
       lightbox.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      window.scrollTo(0, lbScrollY);
     }
 
     function lbStep(dir) {
@@ -909,6 +946,14 @@
         const open = () => lbOpen(i);
         const media = sec.querySelector(".wp-media");
         media?.addEventListener("click", open);
+        if (media) {
+          media.tabIndex = 0;
+          media.setAttribute("role", "button");
+          media.setAttribute("aria-label", WORKS[i].title + " 자세히 보기");
+          media.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+          });
+        }
         sec.querySelector(".wp-open")?.addEventListener("click", open);
 
         /* 갤러리와 같은 연출 — 작품에 올리면 그 사진이 뒤에 크게 깔린다.
